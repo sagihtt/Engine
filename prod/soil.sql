@@ -1,5 +1,5 @@
 -- -----------------------------------------------------
--- Schema soil---
+-- Schema soil
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS soil DEFAULT CHARACTER SET utf8 ;
 USE soil ;
