@@ -1,0 +1,20 @@
+# OS/Editors
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs/temp
+*.log
+tmp/
+temp/
+
+# Secrets (evite versionar)
+.env
+*.key
+*.pem
+
+# Common build artifacts (se existirem)
+dist/
+build/
