@@ -145,3 +145,11 @@ Formato: JSON (`Content-Type: application/json`)
 
 - DELETE /technical-specifications/{id}  
   Remove vínculo.
+
+## Glossário
+- Request: requisição feita pelo cliente para a API.
+- Response: resposta retornada pela API.
+- Header: metadado enviado na requisição ou resposta.
+- Bearer: tipo de autenticação que envia um token no header `Authorization`.
+- Token: credencial curta usada para autenticação.
+- Query params: parâmetros enviados na URL após `?`, usados para filtrar ou ajustar a resposta.
