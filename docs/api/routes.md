@@ -7,15 +7,6 @@ Formato: JSON (`Content-Type: application/json`)
 
 **Filtros:** são enviados como query params. Ex.: `/vehicles?manufacturer=Honda&year=2020`.
 
-### Exemplo de USO (métodos HTTP)
-
-| Método | Uso | Exemplo |
-|---|---|---|
-| GET | Buscar dados | GET /api/vehicles |
-| POST | Criar recurso | POST /api/catalogs |
-| PATCH | Atualizar parcialmente | PATCH /api/products/10 |
-| DELETE | Remover recurso | DELETE /api/vehicles/5 |
-
 ## Auth / Usuário
 
 - POST /auth/signup  
@@ -145,6 +136,15 @@ Formato: JSON (`Content-Type: application/json`)
 
 - DELETE /technical-specifications/{id}  
   Remove vínculo.
+
+### Exemplo de USO (métodos HTTP)
+
+| Método | Uso | Exemplo |
+|---|---|---|
+| GET | Buscar dados | GET /api/vehicles |
+| POST | Criar recurso | POST /api/catalogs |
+| PATCH | Atualizar parcialmente | PATCH /api/products/10 |
+| DELETE | Remover recurso | DELETE /api/vehicles/5 |
 
 ## Glossário
 - Request: requisição feita pelo cliente para a API.
