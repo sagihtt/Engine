@@ -11,6 +11,17 @@
   "meta": { }
 }
 ```
+Exemplo:
+```json
+{
+  "data": {
+    "id": 10,
+    "manufacturer": "Honda",
+    "model": "Civic"
+  },
+  "meta": { }
+}
+```
 
 ## 3. Formato padrão de erro
 ```json
