@@ -3,6 +3,11 @@
 Base URL: /api  
 Formato: JSON (`Content-Type: application/json`)
 
+**Autenticação:** rotas de usuário e admin exigem `Authorization: Bearer <token>`.  
+Rotas públicas de leitura não exigem autenticação.
+
+**Filtros:** são enviados como query params. Ex.: `/vehicles?manufacturer=Honda&year=2020`.
+
 ## Auth / Usuário
 
 - POST /auth/signup  
@@ -132,6 +137,15 @@ Formato: JSON (`Content-Type: application/json`)
 
 - DELETE /technical-specifications/{id}  
   Remove vínculo.
+
+### Códigos comuns
+- 200 OK
+- 201 Created
+- 204 No Content
+- 400 Bad Request
+- 401 Unauthorized
+- 403 Forbidden
+- 404 Not Found
 
 ### Exemplo de USO (métodos HTTP)
 
