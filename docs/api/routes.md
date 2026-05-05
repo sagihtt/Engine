@@ -1,6 +1,6 @@
 # Rotas REST - Soil (v1)
 
-Base URL: /api/v1  
+Base URL: /api  
 Formato: JSON (`Content-Type: application/json`)
 
 ## Auth / Usuário
