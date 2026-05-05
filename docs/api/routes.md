@@ -3,8 +3,7 @@
 Base URL: /api  
 Formato: JSON (`Content-Type: application/json`)
 
-**Autenticação:** rotas de usuário e admin exigem `Authorization: Bearer <token>`.  
-Rotas públicas de leitura não exigem autenticação.
+**Autenticação:** rotas de usuário, leitura e admin exigem `Authorization: Bearer <token>`.
 
 **Filtros:** são enviados como query params. Ex.: `/vehicles?manufacturer=Honda&year=2020`.
 
@@ -43,7 +42,7 @@ Rotas públicas de leitura não exigem autenticação.
 - PATCH /users/me/password  
   Atualiza senha.
 
-## Vehicles (público/leitura)
+## Vehicles (leitura - usuário)
 
 - GET /vehicles  
   Lista veículos (filtros: manufacturer, model, type, year).
@@ -54,7 +53,7 @@ Rotas públicas de leitura não exigem autenticação.
 - GET /vehicles/search  
   Busca avançada.
 
-## Catalogs (público/leitura)
+## Catalogs (leitura - usuário)
 
 - GET /catalogs  
   Lista itens de catálogo (filtros: type, specification).
@@ -65,7 +64,7 @@ Rotas públicas de leitura não exigem autenticação.
 - GET /catalogs/search  
   Busca avançada.
 
-## Technical Specifications (público/leitura)
+## Technical Specifications (leitura - usuário)
 
 - GET /technical-specifications  
   Lista vínculos (filtros: vehicle_id, catalog_id).
