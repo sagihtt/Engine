@@ -1,16 +1,3 @@
-
-GET: buscar dados (não altera nada).
-Ex.: GET /api/v1/vehicles
-
-POST: criar um novo recurso.
-Ex.: POST /api/v1/catalogs
-
-PATCH: atualizar parcialmente um recurso existente.
-Ex.: PATCH /api/v1/products/10 (atualiza só preço)
-
-DELETE: remover um recurso.
-Ex.: DELETE /api/v1/vehicles/5
-
 # Rotas REST - Soil (v1)
 
 Base URL: /api/v1  
@@ -145,3 +132,17 @@ Formato: JSON (`Content-Type: application/json`)
 
 - DELETE /technical-specifications/{id}  
   Remove vínculo.
+
+# Exemplo de utilização das rotas REST
+
+- GET: buscar dados (não altera nada).
+  Ex.: GET /api/v1/vehicles
+
+- POST: criar um novo recurso.
+  Ex.: POST /api/v1/catalogs
+
+- PATCH: atualizar parcialmente um recurso existente.
+  Ex.: PATCH /api/v1/products/10 (atualiza só preço)
+
+- DELETE: remover um recurso.
+  Ex.: DELETE /api/v1/vehicles/5
