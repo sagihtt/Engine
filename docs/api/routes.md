@@ -133,16 +133,11 @@ Formato: JSON (`Content-Type: application/json`)
 - DELETE /technical-specifications/{id}  
   Remove vínculo.
 
-### Exemplo de utilização das rotas REST
+### Exemplo rápido (métodos HTTP)
 
-- GET: buscar dados (não altera nada).
-  Ex.: GET /api/v1/vehicles
-
-- POST: criar um novo recurso.
-  Ex.: POST /api/v1/catalogs
-
-- PATCH: atualizar parcialmente um recurso existente.
-  Ex.: PATCH /api/v1/products/10 (atualiza só preço)
-
-- DELETE: remover um recurso.
-  Ex.: DELETE /api/v1/vehicles/5
+| Método | Uso | Exemplo |
+|---|---|---|
+| GET | Buscar dados | GET /api/vehicles |
+| POST | Criar recurso | POST /api/catalogs |
+| PATCH | Atualizar parcialmente | PATCH /api/products/10 |
+| DELETE | Remover recurso | DELETE /api/vehicles/5 |
