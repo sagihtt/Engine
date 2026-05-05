@@ -73,6 +73,12 @@ Exemplo:
 ## 8. Autenticação
 - Token enviado em `Authorization: Bearer <token>`
 
+Fluxo típico:
+1. O usuário faz login em `/auth/login`.
+2. A API retorna um `token`.
+3. O cliente salva o token.
+4. Em cada requisição autenticada, o cliente envia `Authorization: Bearer <token>`.
+
 Exemplo (request completo):
 ```http
 GET /api/vehicles HTTP/1.1
