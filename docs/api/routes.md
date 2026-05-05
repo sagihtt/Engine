@@ -133,7 +133,7 @@ Formato: JSON (`Content-Type: application/json`)
 - DELETE /technical-specifications/{id}  
   Remove vínculo.
 
-### Exemplo rápido (métodos HTTP)
+### Exemplo de USO (métodos HTTP)
 
 | Método | Uso | Exemplo |
 |---|---|---|
