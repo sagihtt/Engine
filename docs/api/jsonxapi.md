@@ -6,7 +6,7 @@
 
 Exemplo (request):
 ```http
-GET /api/v1/vehicles HTTP/1.1
+GET /api/vehicles HTTP/1.1
 Accept: application/json
 Authorization: Bearer <token>
 ```
