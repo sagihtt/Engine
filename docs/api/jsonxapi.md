@@ -77,3 +77,10 @@ Exemplo:
 ```http
 Authorization: Bearer eyJhbGciOi...
 ```
+
+## 9. Glossário
+- Request: requisição feita pelo cliente para a API.
+- Response: resposta retornada pela API.
+- Header: metadado enviado na requisição ou resposta.
+- Bearer: tipo de autenticação que envia um token no header `Authorization`.
+- Token: credencial curta usada para autenticação.
