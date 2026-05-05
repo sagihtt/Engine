@@ -7,6 +7,15 @@ Formato: JSON (`Content-Type: application/json`)
 
 **Filtros:** são enviados como query params. Ex.: `/vehicles?manufacturer=Honda&year=2020`.
 
+### Exemplo de USO (métodos HTTP)
+
+| Método | Uso | Exemplo |
+|---|---|---|
+| GET | Buscar dados | GET /api/vehicles |
+| POST | Criar recurso | POST /api/catalogs |
+| PATCH | Atualizar parcialmente | PATCH /api/products/10 |
+| DELETE | Remover recurso | DELETE /api/vehicles/5 |
+
 ## Auth / Usuário
 
 - POST /auth/signup  
@@ -42,7 +51,7 @@ Formato: JSON (`Content-Type: application/json`)
 - PATCH /users/me/password  
   Atualiza senha.
 
-## Vehicles (leitura - usuário)
+## Vehicles (usuário)
 
 - GET /vehicles  
   Lista veículos (filtros: manufacturer, model, type, year).
@@ -53,7 +62,7 @@ Formato: JSON (`Content-Type: application/json`)
 - GET /vehicles/search  
   Busca avançada.
 
-## Catalogs (leitura - usuário)
+## Catalogs (usuário)
 
 - GET /catalogs  
   Lista itens de catálogo (filtros: type, specification).
@@ -64,7 +73,7 @@ Formato: JSON (`Content-Type: application/json`)
 - GET /catalogs/search  
   Busca avançada.
 
-## Technical Specifications (leitura - usuário)
+## Technical Specifications (usuário)
 
 - GET /technical-specifications  
   Lista vínculos (filtros: vehicle_id, catalog_id).
@@ -136,21 +145,3 @@ Formato: JSON (`Content-Type: application/json`)
 
 - DELETE /technical-specifications/{id}  
   Remove vínculo.
-
-### Códigos comuns
-- 200 OK
-- 201 Created
-- 204 No Content
-- 400 Bad Request
-- 401 Unauthorized
-- 403 Forbidden
-- 404 Not Found
-
-### Exemplo de USO (métodos HTTP)
-
-| Método | Uso | Exemplo |
-|---|---|---|
-| GET | Buscar dados | GET /api/vehicles |
-| POST | Criar recurso | POST /api/catalogs |
-| PATCH | Atualizar parcialmente | PATCH /api/products/10 |
-| DELETE | Remover recurso | DELETE /api/vehicles/5 |
