@@ -73,9 +73,12 @@ Exemplo:
 ## 8. Autenticação
 - Token enviado em `Authorization: Bearer <token>`
 
-Exemplo:
+Exemplo (request completo):
 ```http
-Authorization: Bearer eyJhbGciOi...
+GET /api/vehicles HTTP/1.1
+Host: api.seu-dominio.com
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ## 9. Glossário
