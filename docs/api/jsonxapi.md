@@ -4,6 +4,13 @@
 - Content-Type: application/json  
 - Accept: application/json  
 
+Exemplo (request):
+```http
+GET /api/v1/vehicles HTTP/1.1
+Accept: application/json
+Authorization: Bearer <token>
+```
+
 ## 2. Formato padrão de resposta (sucesso)
 ```json
 {
@@ -65,3 +72,8 @@ Exemplo:
 
 ## 8. Autenticação
 - Token enviado em `Authorization: Bearer <token>`
+
+Exemplo:
+```http
+Authorization: Bearer eyJhbGciOi...
+```
