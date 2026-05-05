@@ -133,7 +133,7 @@ Formato: JSON (`Content-Type: application/json`)
 - DELETE /technical-specifications/{id}  
   Remove vínculo.
 
-# Exemplo de utilização das rotas REST
+### Exemplo de utilização das rotas REST
 
 - GET: buscar dados (não altera nada).
   Ex.: GET /api/v1/vehicles
