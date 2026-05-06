@@ -3,7 +3,7 @@
 Base URL: /api  
 Formato: JSON (`Content-Type: application/json`)
 
-**Autenticação:** rotas de usuário, leitura e admin exigem `Authorization: Bearer <token>`.
+**Autenticação:** rotas de usuário e  admin exigem `Authorization: Bearer <token>`.
 
 **Filtros:** são enviados como query params. Ex.: `/vehicles?manufacturer=Honda&year=2020`.
 
