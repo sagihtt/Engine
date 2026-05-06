@@ -86,6 +86,19 @@ POST /api/vehicles HTTP/1.1
 Host: exemplo.com
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+{
+  "data": {
+    "manufacturer": "Toyota",
+    "model": "Corolla",
+    "year": 2024
+  },
+  "meta": { 
+    "page": 1, 
+    "per_page": 20, 
+    "total": 100 
+  }
+}
 ```
 
 ## 9. Glossário
