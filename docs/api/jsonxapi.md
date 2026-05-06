@@ -7,6 +7,7 @@
 Exemplo (request):
 ```http
 GET /api/vehicles HTTP/1.1
+Host: exemplo.com
 Accept: application/json
 Authorization: Bearer <token>
 ```
@@ -79,11 +80,11 @@ Fluxo típico:
 3. O cliente salva esse token.
 4. Em cada requisição protegida, o cliente envia `Authorization: Bearer <token>`.
 
-Exemplo (request completo):
+Exemplo:
 ```http
 POST /api/vehicles HTTP/1.1
 Host: exemplo.com
-Accept: application/json
+Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
