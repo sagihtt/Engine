@@ -81,8 +81,8 @@ Fluxo típico:
 
 Exemplo (request completo):
 ```http
-GET /api/vehicles HTTP/1.1
-Host: api.seu-dominio.com
+POST /api/vehicles HTTP/1.1
+Host: exemplo.com
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
