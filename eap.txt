@@ -1,0 +1,60 @@
+1. Planejamento
+Definição do Escopo Detalhado: Documentação de todos os campos técnicos de óleo e filtros que o sistema deve exibir.
+
+Modelagem do Banco de Dados (ERD): Desenho do diagrama entidade-relacionamento para as tabelas de Marcas, Modelos, Motores, Óleos e Filtros.
+
+Design de Interface (UI/UX): Criação de protótipos (wireframes) da tela de busca e da tela de resultados.
+
+Arquitetura da API: Definição das rotas REST (ex: GET /veiculos, GET /especificacoes/:id).
+
+Plano de Dados: Definição da estratégia de carga inicial (importação de planilhas ou manuais técnicos para o MySQL).
+
+2. Desenvolvimento
+2.1. Camada de Dados (MySQL)
+Criação do Schema: Execução dos scripts DDL para criação das tabelas e chaves estrangeiras.
+
+Popular o Banco: Inserção dos dados técnicos de veículos, óleos e filtros.
+
+Otimização: Criação de índices nas colunas "Modelo" e "Ano" para garantir buscas rápidas.
+
+2.2. Back-end (Node.js)
+Setup do Projeto: Inicialização do npm, instalação do Express, Sequelize (ou driver mysql2) e CORS.
+
+Configuração de Conexão: Implementação da conexão segura com o servidor MySQL já existente.
+
+Desenvolvimento das Models: Mapeamento das tabelas do banco no código Node.js.
+
+Desenvolvimento de Controllers e Rotas: Lógica para receber o modelo/ano e realizar a query no banco.
+
+Validação e Tratamento de Erros: Implementação de retornos para casos de "Veículo não encontrado" ou erro de servidor.
+
+2.3. Front-end (Angular)
+Setup do Workspace: Criação do projeto Angular e instalação de bibliotecas de CSS (Bootstrap, Tailwind ou Angular Material).
+
+Desenvolvimento de Services: Criação do serviço HttpClient para consumir a API Node.js.
+
+Componente de Busca: Criação do formulário com seletores de Marca/Modelo/Ano.
+
+Componente de Resultados: Criação da página/card para exibição das especificações técnicas.
+
+Responsividade: Ajustes de CSS para que o sistema funcione em celulares (útil para mecânicos no dia a dia).
+
+3. Implantação
+Configuração de Variáveis de Ambiente: Ajuste das credenciais de produção no servidor Node.js.
+
+Build do Front-end: Geração dos arquivos estáticos do Angular (ng build).
+
+Deploy do Back-end: Upload do código para o servidor e inicialização do processo (usando PM2, por exemplo).
+
+Testes de Integração: Verificação se a página HTML5 está conseguindo "conversar" com a API no servidor online.
+
+Homologação: Teste de ponta a ponta (Input do carro -> Busca -> Exibição correta dos dados).
+
+4. Finalização
+Documentação Técnica: Registro das rotas da API e estrutura do banco para manutenções futuras.
+
+Manual de Operação: Breve guia de como atualizar os dados de óleo e filtro no MySQL.
+
+Backup Inicial: Realização do primeiro dump do banco de dados populado.
+
+Termo de Encerramento: Validação final com os stakeholders de que o sistema atende aos requisitos técnicos.
