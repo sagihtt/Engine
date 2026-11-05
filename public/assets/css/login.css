@@ -1,0 +1,283 @@
+/* ==========================================================
+   Engine Labs - Login (Engine Metal Flat)
+   ========================================================== */
+
+/* Fonte principal - Fira Sans Light & Regular */
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400&display=swap");
+
+:root {
+  --bg: #0a0a0a;
+  --panel: #121212;
+  --text: #f1f1f1;
+  --placeholder: rgba(241, 241, 241, 0.45);
+  --metal: #f1f1f1;
+  --metal-hover: #d3d3d3;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: "Fira Sans", sans-serif;
+
+  /* Cor de Fundo Base */
+  background-color: var(--bg);
+
+  /* --- EFEITO QUADRICULADO (TECH GRID) --- */
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  /* --------------------------------------- */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.3px;
+
+  /* --- BLOQUEAR SELEÇÃO DE TEXTO (EFEITO APP) --- */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  /* FIX DO CENTRO: */
+  height: 100vh; /* Fallback para navegadores antigos */
+  height: 100dvh; /* Altura dinâmica (desconta a barra do navegador) */
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  /* TRUQUE ÓTICO: */
+  /* Adiciona um espaço vazio embaixo para "empurrar" o login levemente para cima.
+     Isso evita que ele pareça estar "caindo" na tela. */
+  padding-bottom: 12vh;
+  box-sizing: border-box;
+}
+
+.login-panel {
+  background-color: var(--panel);
+  border: none;
+  border-radius: 0;
+  padding: 1.5rem 1rem;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 0 45px rgb(0, 0, 0);
+}
+
+/* Logo */
+.logo {
+  width: 233px;
+  margin-bottom: 0.5rem;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+  transition: transform 0.3s ease;
+  -webkit-user-drag: none;
+}
+.logo:hover { opacity: 1; transform: scale(1.04); }
+/* Bloqueia arrasto do link que envolve a logo */
+.left-area a {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Inputs */
+.input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #181818;
+  border: none;
+  margin: 0 auto 1rem auto;
+  width: 65%;
+  max-width: 233px;
+  height: 45px;
+  padding: 0 0.8rem;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+.input-group:focus-within {
+  background-color: #1f1f1f;
+  /* box-shadow: 0 0 0 1px var(--metal); */
+}
+.icon {
+  color: var(--metal);
+  margin-right: 0.6rem;
+  font-size: 1.1rem;
+}
+input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  flex: 1;
+  font-size: 1.05rem;
+  font-weight: 300; /* Light */
+  font-family: "Fira Sans", sans-serif;
+  letter-spacing: 0.3px;
+}
+input::placeholder {
+  color: var(--placeholder);
+}
+
+/* Botão LOGIN - Engine Metal Flat sem borda */
+.btn-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 130px; /* tamanho fixo = metade aproximada dos inputs */
+  height: 40px; /* metade da altura dos inputs */
+  margin: 0rem auto 0 auto;
+  background-color: #181818;
+  color: var(--metal);
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.btn-login:hover {
+  transform: scale(1.07);
+  background-color: #1f1f1f; /* leve realce no hover */
+  color: var(--metal-hover);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0); /* sutil brilho de metal polido */
+}
+
+.btn-login:active {
+  transform: scale(0.985);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0);
+}
+
+/* ==========================================================
+   AUTOFILL FIX (CORREÇÃO DA CAIXA PRETA)
+   ========================================================== */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--text) !important;
+
+  /* Estado Padrão (Sem Foco): #181818 */
+  -webkit-box-shadow: 0 0 0px 1000px #181818 inset !important;
+
+  /* O SEGREDINHO: */
+  /* Mudei de 0.25s para 0.3s e usei 'ease' (igual ao container). */
+  /* Isso faz o input demorar uma fração a mais para escurecer, evitando o flash preto. */
+  transition: background-color 5000s ease 0s, box-shadow 0.3s ease !important;
+
+  caret-color: var(--text);
+}
+
+/* Estado Focado: #1f1f1f */
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #1f1f1f inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+
+  /* Quando foca, a transição é rápida para dar feedback instantâneo */
+  transition: box-shadow 0.2s ease !important;
+}
+
+/* Responsivo Tablet */
+@media (max-width: 768px) {
+  body {
+    background-color: var(--bg);
+    padding: 0 1rem;
+  }
+  .login-panel {
+    max-width: 90%;
+    width: 100%;
+    padding: 2rem 0rem;
+    box-shadow: none;
+  }
+  .logo {
+    width: 233px;
+    margin-bottom: 0.5rem;
+  }
+  .input-group {
+    width: 50%;
+    height: 45px;
+    margin-bottom: 1.2rem;
+  }
+  .btn-login {
+    width: 120px;
+    height: 45px;
+    font-size: 1rem;
+  }
+}
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 480px) {
+  .login-panel {
+    max-width: 85%; /* Mais margem lateral */
+    padding: 2rem 1rem;
+  }
+
+  .logo {
+    width: 233px;
+    max-width: 100%;
+  }
+
+  .input-group {
+    width: 100%; /* Input ocupa largura total do painel */
+  }
+
+  /* AQUI ESTAVA O PROBLEMA: Mudei de 100% para 130px */
+  .btn-login {
+    width: 130px; /* Volta ao tamanho padrão do desktop */
+  }
+}
+
+/* ==========================================================
+   TOAST NOTIFICATIONS (ADICIONADO)
+   ========================================================== */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    min-width: 280px;
+    background: #181818;
+    color: #fff;
+    padding: 1rem 1.2rem;
+    border-left: 4px solid #333;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.95rem;
+    pointer-events: auto;
+    
+    /* Animação */
+    animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+@keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeOut { to { opacity: 0; transform: translateX(20px); } }
+
+/* Estilo de Erro (Neon Vermelho) */
+.toast.error { border-color: #FF0000;}
+.toast.error i { color: #FF0000; font-size: 1.2rem; }

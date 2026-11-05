@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel - Engine</title>
+
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/dashboard.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
+    <link rel="stylesheet" href="assets/css/daterangepicker-theme.css" />
+
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="navbar-content">
+        <div class="left-area">
+          <div class="logo-area">
+            <img
+              src="assets/img/logo.png"
+              alt="Engine Labs"
+              class="logo"
+              draggable="false"
+            />
+          </div>
+          <nav class="nav-links">
+            <div id="btnCalendario" class="nav-item date-nav">
+              <i class="ph ph-calendar"></i>
+              <span id="dateRangePickerLabel">01/12/2025 - 31/12/2025</span>
+            </div>
+            <a href="/registro" class="nav-item"
+              ><i class="ph ph-clock"></i><span>Ponto</span></a
+            >
+            <a href="/relatorios" class="nav-item">
+              <i class="ph ph-file-text"></i><span>Relatórios</span>
+            </a>
+            <a href="/console" class="nav-item">
+              <i class="ph ph-terminal-window"></i> <span>Console</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="user-menu" id="userMenu">
+          <div class="user-btn" id="userBtn">
+            <div
+              class="avatar-container"
+              style="
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-right: 0.5rem;
+                border: 2px solid #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <img
+                id="userAvatarNav"
+                src="https://ui-avatars.com/api/?name=User&background=333&color=fff"
+                alt="Avatar"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </div>
+            <span id="userName">Usuário</span>
+            <i class="ph ph-caret-down-fill caret"></i>
+          </div>
+
+          <div class="user-dropdown hidden" id="userDropdown">
+            <a href="/configuracoes"
+              ><i class="ph ph-gear"></i> Configurações</a
+            >
+
+            <a href="#" id="btnToggleThemeNav"
+              ><i class="ph ph-faders"></i> Layout</a
+            >
+
+            <a href="/logout" class="logout" id="btnLogoutNav"
+              ><i class="ph ph-sign-out"></i> Sair</a
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section
+        class="dashboard-container"
+        style="position: relative; z-index: 10"
+      >
+        <h2 id="estatisticasHoras" class="chart-section-title">Dashboard</h2>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="ph ph-clock-counter-clockwise"></i>
+            </div>
+            <span class="kpi-title">Saldo Horas</span>
+            <span class="kpi-value" id="kpiSaldo">--</span>
+            <div class="kpi-glow"></div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon"><i class="ph ph-trend-up"></i></div>
+            <span class="kpi-title">Média Diária</span>
+            <span class="kpi-value" id="kpiMedia">--</span>
+            <div class="kpi-glow"></div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon"><i class="ph ph-calendar-check"></i></div>
+            <span class="kpi-title">Dias Restantes</span>
+            <span class="kpi-value" id="kpiDiasRest">--</span>
+            <div class="kpi-glow"></div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon"><i class="ph ph-lightning"></i></div>
+            <span class="kpi-title">Eficiência</span>
+            <span class="kpi-value" id="kpiEficiencia">--</span>
+            <div class="kpi-glow"></div>
+          </div>
+        </div>
+
+        <section class="charts-container">
+          <div class="chart-block">
+            <div class="chart-header user-header">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="url(#grad1)"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="user-icon"
+              >
+                <defs>
+                  <linearGradient
+                    id="grad1"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="var(--accent)" />
+                    <stop offset="100%" stop-color="var(--accent2)" />
+                  </linearGradient>
+                </defs>
+                <circle cx="12" cy="7" r="4" />
+                <path d="M5.5 21a8.5 8.5 0 0 1 13 0" />
+              </svg>
+              <span id="userMatriculaDisplay">...</span>
+              <span id="userStatusBadge" class="status-badge"></span>
+            </div>
+
+            <div class="chart-layout">
+              <div class="chart-info">
+                <p>
+                  <strong>Trabalhadas:</strong>
+                  <span id="userTrabalhadas">0h</span>
+                </p>
+                <p>
+                  <strong>Restantes:</strong> <span id="userRestantes">0h</span>
+                </p>
+                <p>
+                  <strong>Perdidas:</strong> <span id="userPerdidas">0h</span>
+                </p>
+              </div>
+              <div class="chart-canvas-wrapper">
+                <canvas id="chartUser"></canvas>
+                <div class="chart-center" id="centerUser">0h</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-block">
+            <div class="chart-header geral-header">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="url(#grad2)"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="global-icon"
+              >
+                <defs>
+                  <linearGradient
+                    id="grad2"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="var(--accent)" />
+                    <stop offset="100%" stop-color="var(--accent2)" />
+                  </linearGradient>
+                </defs>
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20Z" />
+              </svg>
+              <span>Estatística Geral</span>
+            </div>
+
+            <div class="chart-layout">
+              <div class="chart-info">
+                <p>
+                  <strong>Trabalhadas:</strong>
+                  <span id="geralTrabalhadas">0h</span>
+                </p>
+                <p>
+                  <strong>Restantes:</strong>
+                  <span id="geralRestantes">0h</span>
+                </p>
+                <p>
+                  <strong>Perdidas:</strong> <span id="geralPerdidas">0h</span>
+                </p>
+              </div>
+              <div class="chart-canvas-wrapper">
+                <canvas id="chartGeral"></canvas>
+                <div class="chart-center" id="centerGeral">0h</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="chart-block full-width">
+          <div class="chart-header">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="url(#gradTimeline)"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="user-icon"
+              style="stroke: url(#gradTimeline)"
+            >
+              <defs>
+                <linearGradient
+                  id="gradTimeline"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stop-color="var(--accent)" />
+                  <stop offset="100%" stop-color="var(--accent2)" />
+                </linearGradient>
+              </defs>
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+            <span>Evolução Diária</span>
+          </div>
+          <div class="chart-canvas-wrapper wide">
+            <canvas id="chartTimeline"></canvas>
+          </div>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-label" id="progressText">XP Geral: 0%</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+          </div>
+        </div>
+
+        <h2 class="registros-title">Registros de Ponto</h2>
+        <div class="table-wrapper">
+          <table id="registrosTable">
+            <thead>
+              <tr>
+                <th>Matrícula</th>
+                <th>Email</th>
+                <th>Entrada</th>
+                <th>Saída</th>
+                <th>Duração (h)</th>
+                <th>Mês</th>
+                <th>Semana</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="load-more-container">
+          <button
+            id="btnLoadMore"
+            class="btn-load-more hidden"
+            title="Carregar mais registros"
+          >
+            <i class="ph ph-caret-double-down"></i>
+          </button>
+        </div>
+      </section>
+    </main>
+    <script src="assets/js/global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="assets/js/daterangepicker-config.js"></script>
+    <script src="assets/js/dashboard.js?v=9001"></script>
+  </body>
+</html>

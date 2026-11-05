@@ -1,0 +1,2 @@
+# Formato: matricula,hash_bcrypt
+25214290001,$2a$10$exampleHashPlaceholderForDemonstrationPurposeOnly12345

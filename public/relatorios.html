@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relatórios - Engine</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+
+    <link rel="stylesheet" href="assets/css/dashboard.css" />
+    <link rel="stylesheet" href="assets/css/relatorios.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
+    <link rel="stylesheet" href="assets/css/daterangepicker-theme.css" />
+
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script>
+      // APLICA O TEMA ANTES DA PÁGINA CARREGAR POR COMPLETO
+      if (localStorage.getItem("config_cleanMode") === "true") {
+        document.body.classList.add("clean-mode");
+      }
+    </script>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="navbar-content">
+        <div class="left-area">
+          <img
+            src="assets/img/logo.png"
+            alt="Engine Labs"
+            class="logo"
+            onclick="window.location.href='/dashboard'"
+          />
+          <nav class="nav-links">
+            <a href="/registro" class="nav-item"
+              ><i class="ph ph-clock"></i><span>Ponto</span></a
+            >
+            <a href="/dashboard" class="nav-item"
+              ><i class="ph ph-chart-bar"></i><span>Dashboard</span></a
+            >
+            <a href="/relatorios" class="nav-item active"
+              ><i class="ph ph-file-text"></i><span>Relatórios</span></a
+            >
+            <a href="/console" class="nav-item">
+              <i class="ph ph-terminal-window"></i> <span>Console</span>
+            </a>
+          </nav>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <div class="user-btn" id="userBtn">
+            <div
+              class="avatar-container"
+              style="
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-right: 0.5rem;
+                border: 2px solid #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <img
+                id="userAvatarNav"
+                src="https://ui-avatars.com/api/?name=User&background=333&color=fff"
+                alt="Avatar"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </div>
+            <span id="userName">Usuário</span
+            ><i class="ph ph-caret-down-fill caret"></i>
+          </div>
+          <div class="user-dropdown hidden" id="userDropdown">
+            <a href="/configuracoes"
+              ><i class="ph ph-gear"></i> Configurações</a
+            >
+
+            <a href="#" id="btnToggleThemeNav"
+              ><i class="ph ph-faders"></i> Layout</a
+            >
+
+            <a href="/logout" class="logout" id="btnLogoutNav"
+              ><i class="ph ph-sign-out"></i> Sair</a
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="dashboard-container">
+        <h2 class="chart-section-title">Relatórios</h2>
+
+        <div class="reports-layout">
+          <div class="calendar-column">
+            <div class="control-card" id="reportRange">
+              <div class="card-icon">
+                <i class="ph ph-calendar-check"></i>
+              </div>
+              <div class="card-content">
+                <span class="card-label">Período Selecionado</span>
+                <strong class="card-value date-display">Carregando...</strong>
+              </div>
+              <div class="card-action">
+                <i class="ph ph-caret-down"></i>
+              </div>
+            </div>
+
+            <div class="stats-mini-grid">
+              <div class="mini-stat">
+                <span>Registros</span>
+                <strong id="previewCount">--</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Total Horas</span>
+                <strong id="previewHours" style="color: var(--accent2)"
+                  >--</strong
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="actions-column">
+            <div class="control-card action-btn" id="btnExportGeneral">
+              <div class="card-icon team-icon">
+                <i class="ph ph-users-three"></i>
+              </div>
+              <div class="card-content">
+                <strong class="card-value">Relatório da Equipe</strong>
+                <span class="card-label">Visão geral de todos os alunos</span>
+              </div>
+              <div class="card-action">
+                <i class="ph ph-download-simple"></i>
+              </div>
+            </div>
+
+            <div class="control-card action-btn" id="btnExportPDF">
+              <div class="card-icon pdf-icon">
+                <i class="ph ph-file-pdf"></i>
+              </div>
+              <div class="card-content">
+                <strong class="card-value">Relatório Individual</strong>
+                <span class="card-label">Extrato pessoal para comprovação</span>
+              </div>
+              <div class="card-action">
+                <i class="ph ph-download-simple"></i>
+              </div>
+            </div>
+
+            <div class="control-card action-btn" id="btnExportTXT">
+              <div class="card-icon csv-icon"><i class="ph ph-table"></i></div>
+              <div class="card-content">
+                <strong class="card-value">Dados Brutos (CSV)</strong>
+                <span class="card-label">Planilha para conferência</span>
+              </div>
+              <div class="card-action">
+                <i class="ph ph-download-simple"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="assets/js/global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script src="assets/js/relatorios.js"></script>
+
+    <script>
+      // User Menu Toggle & AVATAR LOADER
+      const userBtn = document.getElementById("userBtn");
+      const userDropdown = document.getElementById("userDropdown");
+      const userName = document.getElementById("userName");
+      const userAvatarNav = document.getElementById("userAvatarNav"); // Pegar a imagem
+
+      const matricula = localStorage.getItem("userMatricula") || "Usuário";
+      const savedAvatar = localStorage.getItem("userAvatar"); // Ler do Storage
+
+      if (userName) userName.textContent = matricula;
+      if (savedAvatar && userAvatarNav) userAvatarNav.src = savedAvatar; // Aplicar foto
+
+      if (userBtn) {
+        userBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          userDropdown.classList.toggle("hidden");
+        });
+      }
+      document.addEventListener("click", (e) => {
+        if (
+          userBtn &&
+          !userBtn.contains(e.target) &&
+          userDropdown &&
+          !userDropdown.contains(e.target)
+        ) {
+          userDropdown.classList.add("hidden");
+        }
+      });
+    </script>
+  </body>
+</html>

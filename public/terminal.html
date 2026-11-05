@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Console - Engine</title>
+
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/dashboard.css" />
+    <link rel="stylesheet" href="assets/css/terminal.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <style>
+      /* CSS EXTRA PARA GARANTIR TELA CHEIA NO CONSOLE */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      .server-layout {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+
+      .pterodactyl-grid {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        height: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .console-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        background-color: #0a0a0a;
+        padding: 15px;
+        overflow: hidden;
+        border: 1px solid #272727;
+        border-radius: 6px;
+      }
+
+      #terminal {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #333;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 9999;
+        border-left: 4px solid #2cff05;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        animation: slideIn 0.3s ease;
+      }
+      .toast.error {
+        border-left-color: #ff4fa3;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+      }
+
+      .xterm-viewport::-webkit-scrollbar { width: 10px; }
+      .xterm-viewport::-webkit-scrollbar-track { background: transparent; }
+      .xterm-viewport::-webkit-scrollbar-thumb { background-color: #333; border-radius: 20px; border: 2px solid #000; }
+      .xterm-viewport::-webkit-scrollbar-thumb:hover { background-color: #555; }
+
+      :root {
+        --margem-lateral: 5.82rem;
+      }
+
+      .navbar-content {
+        padding-left: 25px;
+        padding-right: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .pterodactyl-grid {
+        padding-left: var(--margem-lateral) !important;
+        padding-right: var(--margem-lateral) !important;
+        padding-top: 0 !important;
+        padding-bottom: 20px !important;
+      }
+
+      .server-layout {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+
+/* ==========================================================
+       RESPONSIVIDADE (MOBILE & TABLET) - CORREÇÃO DE ESPAÇAMENTO
+      ========================================================== */
+      @media (max-width: 1024px) {
+        /* 1. Remove as margens gigantes laterais no mobile */
+        :root {
+            --margem-lateral: 10px; /* Margem mínima no celular */
+        }
+
+        .pterodactyl-grid {
+          flex-direction: column;
+          align-items: stretch; /* Estica para ocupar a largura toda */
+          
+          /* Força o override dos !important do desktop */
+          padding-left: var(--margem-lateral) !important;
+          padding-right: var(--margem-lateral) !important;
+          padding-bottom: 80px !important; /* Espaço pro teclado não cobrir */
+        }
+
+        .console-container {
+          width: 100%;      /* Ocupa tudo */
+          max-width: none;  /* Remove a trava de 320px que estava espremendo */
+          height: 100%;     /* Garante altura */
+          min-height: 60vh; /* Altura mínima garantida */
+        }
+
+        /* Ajustes na Navbar Mobile */
+        .navbar-content {
+          padding: 0 15px;
+        }
+        .logo { width: 110px; }
+        .nav-item span, .date-nav span, .user-btn span { display: none; }
+        .nav-item i, .date-nav i, .user-btn i { font-size: 1.4rem; }
+        .left-area { gap: 1rem; }
+        .nav-links { gap: 0.7rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="navbar-content">
+        <div class="left-area">
+          <div class="logo-area">
+            <a href="/dashboard" style="display: block; text-decoration: none">
+              <img
+                src="assets/img/logo.png"
+                alt="Engine Labs"
+                class="logo"
+                draggable="false"
+              />
+            </a>
+          </div>
+
+          <nav class="nav-links">
+            <a href="/registro" class="nav-item"
+              ><i class="ph ph-clock"></i><span>Ponto</span></a
+            >
+            <a href="/dashboard" class="nav-item">
+              <i class="ph ph-chart-bar"></i><span>Dashboard</span>
+            </a>
+
+            <a href="/relatorios" class="nav-item">
+              <i class="ph ph-file-text"></i><span>Relatórios</span>
+            </a>
+            <a href="/console" class="nav-item active"
+              ><i class="ph ph-terminal-window"></i><span>Console</span></a
+            >
+          </nav>
+        </div>
+
+        <div class="user-menu" id="userMenu">
+          <div class="user-btn" id="userBtn" style="cursor: pointer">
+            <div
+              class="avatar-container"
+              style="
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-right: 0.5rem;
+                border: 2px solid #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <img
+                id="userAvatarNav"
+                src="https://ui-avatars.com/api/?name=User&background=333&color=fff"
+                alt="Avatar"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </div>
+            <span id="userName">Usuário</span>
+            <i class="ph ph-caret-down-fill caret"></i>
+          </div>
+
+          <div class="user-dropdown hidden" id="userDropdown">
+            <a href="/configuracoes">
+              <i class="ph ph-gear"></i> Configurações
+            </a>
+
+            <a href="/logout" class="logout" id="btnLogoutNav">
+              <i class="ph ph-sign-out"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="server-layout">
+      <div id="sshGate" class="ssh-overlay" style="display: flex">
+        <div class="auth-card">
+          <div class="auth-header">
+            <img src="assets/img/console.png" alt="Console" class="auth-icon" />
+          </div>
+          <form id="formSSH">
+            <div class="ssh-group">
+              <label>USUÁRIO</label>
+              <div class="input-wrapper active-border">
+                <i class="fas fa-user"></i>
+                <input
+                  type="text"
+                  id="sshUser"
+                  placeholder="root"
+                  autocomplete="off"
+                  autofocus
+                />
+              </div>
+            </div>
+            <div class="ssh-group" id="rowPass">
+              <label>SENHA</label>
+              <div class="input-wrapper active-border">
+                <i class="fas fa-key"></i>
+                <input
+                  type="password"
+                  id="sshPass"
+                  autocomplete="new-password"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            <div class="ssh-group">
+              <label>TOKEN 2FA (Engine)</label>
+              <div class="input-wrapper active-border">
+                <i class="fas fa-shield-alt"></i>
+                <input
+                  type="text"
+                  id="ssh2FA"
+                  placeholder="000 000"
+                  maxlength="6"
+                  style="letter-spacing: 3px; font-weight: bold; color: #2cff05"
+                />
+              </div>
+            </div>
+            <div class="auth-footer">
+              <button type="submit" class="btn-enter" id="btnConnectSSH">
+                <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="serverDashboard" class="pterodactyl-grid hidden">
+        <div class="console-container">
+          <div id="terminal"></div>
+        </div>
+      </div>
+    </main>
+
+    <div id="toast-container"></div>
+    <script src="assets/js/global.js"></script>
+
+    <script>
+      // Função Toast
+      window.showToast = function (message, type = "success") {
+        const container = document.getElementById("toast-container");
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.innerHTML =
+          type === "success"
+            ? `<i class="ph ph-check-circle"></i> ${message}`
+            : `<i class="ph ph-warning-circle"></i> ${message}`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.animation = "fadeOut 0.5s forwards";
+          setTimeout(() => toast.remove(), 500);
+        }, 3000);
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const socket = io();
+        // DETECTA SE É MOBILE (Tela menor que 768px)
+        const isMobile = window.innerWidth < 768;
+        // CONFIGURAÇÃO DO XTERM
+        const term = new Terminal({
+          cursorBlink: true,
+          // Se for mobile usa 10px, se for PC usa 14px
+          fontSize: isMobile ? 10 : 14,
+          fontFamily: '"Fira Code", "Courier New", monospace',
+          theme: {
+            background: "#0a0a0a",
+            foreground: "#f0f0f0",
+            cursor: "#2CFF05",
+            selectionBackground: "rgba(44, 255, 5, 0.3)",
+            black: "#000000",
+            red: "#ff5555",
+            green: "#2CFF05",
+            yellow: "#f1fa8c",
+            blue: "#bd93f9",
+            magenta: "#ff79c6",
+            cyan: "#8be9fd",
+            white: "#bfbfbf",
+            brightBlack: "#4d4d4d",
+            brightRed: "#ff6e6e",
+            brightGreen: "#69ff47",
+            brightYellow: "#ffffa5",
+            brightBlue: "#d6acff",
+            brightMagenta: "#ff92df",
+            brightCyan: "#a4ffff",
+            brightWhite: "#ffffff",
+          },
+        });
+        const fitAddon = new FitAddon.FitAddon();
+        term.loadAddon(fitAddon);
+
+        const formSSH = document.getElementById("formSSH");
+        const btnConnect = document.getElementById("btnConnectSSH");
+
+        // Lógica de Login
+        formSSH.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const user = document.getElementById("sshUser").value.trim();
+          const pass = document.getElementById("sshPass").value;
+          const token = document.getElementById("ssh2FA").value.trim();
+
+          // 1. Apenas verificamos se os campos estão preenchidos
+          // O token só é obrigatório se o usuário tiver 2FA, mas deixamos o servidor julgar isso.
+          // Se quiser obrigar sempre, mantenha a checagem.
+          if (!user || !pass)
+            return showToast("Preencha Usuário e Senha", "error");
+
+          btnConnect.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+          
+          // 2. Recupera a matricula salva no Login para o servidor identificar quem somos
+          const matriculaSalva = localStorage.getItem("userMatricula");
+
+          // 3. ENVIA TUDO PARA O SERVIDOR VALIDAR (User SSH, Senha SSH, Token 2FA e quem sou eu)
+          socket.emit("ssh-login", {
+            username: user,
+            password: pass,
+            host: "127.0.0.1",
+            token: token, // Envia o token digitado (vazio ou não)
+            matriculaWeb: matriculaSalva // Envia a matricula para o server checar o JSON
+          });
+        });
+
+        // Resposta do Servidor
+        socket.on("ssh-status", (res) => {
+          if (res.status === "connected") {
+            // SUCESSO: Troca a tela
+            document.getElementById("sshGate").style.display = "none";
+            document
+              .getElementById("serverDashboard")
+              .classList.remove("hidden");
+
+            // Renderiza Terminal
+            term.open(document.getElementById("terminal"));
+
+            setTimeout(() => {
+              fitAddon.fit();
+              term.focus();
+              socket.emit("terminal-resize", {
+                cols: term.cols,
+                rows: term.rows,
+              });
+            }, 300);
+          } else if (res.status === "error") {
+            showToast(res.message, "error");
+            btnConnect.innerHTML = '<i class="fas fa-arrow-right"></i>';
+          }
+        });
+
+        // Entrada e Saída do Terminal
+        socket.on("terminal-output", (d) => term.write(d));
+        term.onData((d) => socket.emit("terminal-input", d));
+
+        // Redimensionamento
+        window.addEventListener("resize", () => {
+          if (
+            !document
+              .getElementById("serverDashboard")
+              .classList.contains("hidden")
+          ) {
+            fitAddon.fit();
+            socket.emit("terminal-resize", {
+              cols: term.cols,
+              rows: term.rows,
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

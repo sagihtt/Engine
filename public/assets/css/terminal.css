@@ -1,0 +1,591 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  --bg-ptero: #05070c;
+  --card-ptero: #1f2937;
+  --card-dark: #111827;
+  --text-main: #d1d5db;
+  --accent-blue: #3b82f6;
+  --border: #374151;
+}
+
+/* RESET E LAYOUT */
+body {
+  background-color: var(--bg-ptero) !important;
+  background-image: none !important;
+  overflow: hidden !important;
+  height: 100vh;
+  padding-top: 0 !important;
+}
+
+.server-layout {
+  padding-top: 95px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 1.5rem;
+}
+
+/* =========================================
+   NOVO SSH GATE (MINIMALISTA)
+   ========================================= */
+.ssh-overlay {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 80px);
+  background: var(--bg-ptero); /* Fundo igual ao dash, transição invisível */
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: 380px;
+  background: var(--card-ptero);
+  border-radius: 0px;
+  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  border: none;
+}
+
+
+.auth-icon {
+    width: 110px;          /* Ajuste o tamanho conforme necessário */
+    height: auto;
+    margin-bottom: 8px;  /* Espaço entre a imagem e o texto "Secure Shell" */
+    display: block;
+    margin-left: auto;    /* Centraliza a imagem */
+    margin-right: auto;
+  opacity: 0.95;
+  transition: transform 0.4s ease;
+  -webkit-user-drag: none;
+}
+.auth-icon:hover {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+
+.ssh-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+}
+.ssh-group label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* ... dentro de assets/css/terminal.css ... */
+
+.input-wrapper {
+  background: var(--card-dark);
+  border: 0px solid var(--border);
+  border-radius: 0px;
+  padding: 0 12px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.2s;
+  /* Garante que o fundo do wrapper seja a cor base para o input */
+  position: relative;
+  overflow: hidden;
+}
+
+.input-wrapper i {
+  color: #6b7280;
+  font-size: 1.1rem;
+  z-index: 2;
+}
+
+.input-wrapper input {
+  background: transparent !important;
+  border: none;
+  outline: none;
+  color: #fff !important; /* Texto Branco Forçado */
+  flex: 1;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.95rem;
+  z-index: 2;
+  width: 100%;
+}
+
+/* ==========================================================
+   CORREÇÃO DO FUNDO BRANCO (AUTOFILL FIX)
+   Isso mata o fundo branco que o navegador coloca sozinho
+   ========================================================== */
+.input-wrapper input:-webkit-autofill,
+.input-wrapper input:-webkit-autofill:hover,
+.input-wrapper input:-webkit-autofill:focus,
+.input-wrapper input:-webkit-autofill:active {
+  /* O truque: Sombra interna maciça da cor do seu fundo (#111827) */
+  -webkit-box-shadow: 0 0 0 30px #111827 inset !important;
+
+  /* Texto branco */
+  -webkit-text-fill-color: #fff !important;
+
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #fff;
+}
+
+/* Animação de foco no wrapper */
+.input-wrapper.active-border:focus-within {
+    border-color: var(--accent-blue); /* Fica azul ao clicar */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+.input-wrapper:focus-within i {
+  color: var(--accent-blue);
+}
+
+.auth-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  
+}
+.status-text {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.btn-enter {
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 1.1rem;    
+  border: none;
+  width: 45px;
+  height: 35px;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-enter:hover {
+  background: #2563eb;
+  opacity: 1; 
+  transform: scale(1.04);
+}
+
+/* FASE 2: DASHBOARD (Mantido Compacto) */
+.pterodactyl-grid {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 12px;
+  height: 100%;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.stat-card {
+  background: var(--card-ptero);
+  padding: 1rem 1.2rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-top: 3px solid var(--border);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.stat-icon {
+  font-size: 1.4rem;
+  color: #9ca3af;
+}
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+.stat-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.stat-value {
+  font-size: 1rem;
+  color: #fff;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+}
+
+.resources-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.resource-card {
+  background: var(--card-ptero);
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 90px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.res-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-bottom: 5px;
+}
+.res-val {
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.res-val small {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 400;
+}
+.res-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.res-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+.res-bar-fill.cpu {
+  background: #06b6d4;
+}
+.res-bar-fill.ram {
+  background: #8b5cf6;
+}
+.res-bar-fill.disk {
+  background: #3b82f6;
+}
+
+.graph-card {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  background: var(--card-dark);
+}
+.graph-card .res-header.absolute {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  z-index: 2;
+}
+.net-stats {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-family: "JetBrains Mono";
+  font-size: 0.75rem;
+}
+canvas#networkChart {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.console-container {
+  background: var(--card-dark);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  
+}
+.console-window {
+  flex: 1;
+  padding: 10px 15px;
+  overflow-y: auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+  color: #d1d5db;
+  line-height: 1.3;
+  
+}
+.log-line {
+  margin-bottom: 2px;
+}
+.log-ts {
+  color: #4b5563;
+  margin-right: 10px;
+  user-select: none;
+  font-size: 0.8rem;
+}
+.log-info {
+  color: #60a5fa;
+}
+.log-warn {
+  color: #facc15;
+}
+.log-err {
+  color: #ef4444;
+}
+.log-sys {
+  color: #34d399;
+}
+
+.console-input-bar {
+  background: var(--card-ptero);
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+}
+.console-input-bar i {
+  color: #9ca3af;
+  font-size: 1rem;
+}
+.console-input-bar input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  width: 100%;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================
+   MODAL 2FA (CORRIGIDO E CENTRALIZADO)
+   Substitua o final do seu CSS por este bloco.
+   ========================================================== */
+
+.hidden {
+  display: none !important;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: var(--card-ptero);
+  border: none; /* Adicionada borda sutil para definição */
+  padding: 0rem;
+  text-align: center;
+  width: 350px;
+  
+  /* [FIX] Centralização interna */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-header i {
+  font-size: 3rem;
+  color: #2563eb;
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+.modal-header h2 {
+  color: #fff;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* [FIX] Estilo forçado para o input do token ficar escuro */
+#input2FA {
+    background: var(--card-dark) !important;
+    border: none;
+    color: #fff !important;
+    border-radius: 0px;
+    width: 100%;
+    padding: 10px;
+}
+
+/* [FIX] Combate o fundo branco do autofill no input do token */
+#input2FA:-webkit-autofill {
+    -webkit-box-shadow: none;
+    -webkit-text-fill-color: #fff !important;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  width: 100%; /* [FIX] Garante que o container dos botões use toda a largura */
+}
+
+.modal-actions button {
+  flex: 1; /* Faz ambos ocuparem o mesmo espaço */
+  padding: 0 1px;
+  cursor: pointer;
+  font-weight: bold;
+  height: 45px; /* [FIX] Altura fixa para ficarem idênticos */
+  border-radius: 0px; /* [FIX] Bordas arredondadas iguais */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "JetBrains Mono", monospace; /* Garante mesma fonte */
+  font-size: 0.9rem;
+}
+
+.btn-cancel {
+  background: var(--card-dark);
+  border: none; /* Borda sutil no cancelar */
+  color: #d1d5db;
+}
+.btn-cancel:hover {
+    background: var(--card-dark);
+}
+
+.btn-confirm {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+}
+.btn-confirm:hover {
+    background: #2563eb;
+}
+
+/* ==========================================================
+   FIX DO INPUT 2FA (Adicione no final do arquivo)
+   ========================================================== */
+
+#input2FA {
+    /* 1. Tira o fundo branco e põe a cor escura do tema */
+    background-color: var(--card-dark); 
+    
+    /* 2. AQUI VOCÊ ALTERA A BORDA */
+    border: 0px solid var(--border); /* Ou coloque uma cor fixa: #333 */
+    
+    /* 3. Estilos de texto */
+    color: #fff;
+    border-radius: 0px; /* Borda arredondada */
+    width: 95%;
+    height: 40px;
+    padding: 0px;
+    outline: none; /* Remove o contorno azul padrão do navegador */
+    
+    /* Garante que o texto fique centralizado e espaçado */
+    text-align: center;
+    letter-spacing: 5px;
+    font-family: "JetBrains Mono", monospace;
+}
+
+/* Efeito quando clica no input (Foco) */
+#input2FA:focus {
+    border-color: var(--accent-blue); /* Fica azul ao clicar */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Remove o fundo branco se o navegador tentar preencher sozinho */
+#input2FA:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px var(--card-dark) inset !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+/* ==========================================================
+   PERSONALIZAÇÃO DA NAVBAR (SÓ PARA O TERMINAL)
+   ========================================================== */
+
+.navbar {
+    /* 1. Mudar a cor de fundo */
+    /* Exemplo: Fundo igual ao do terminal (#0e0e12) ou outra cor */
+    background-color: var(--card-ptero) !important; 
+    
+    /* Espaçamento lateral (Esquerda/Direita) */
+    padding-left: -10rem !important;
+    padding-right: -10rem !important;
+}
+
+
+/* ==========================================================
+   COR DO DROPDOWN DE USUÁRIO (SÓ NO TERMINAL)
+   ========================================================== */
+
+/* 1. A caixa do menu */
+.user-dropdown {
+    /* Cor de fundo (Ex: cinza azulado do tema Pterodactyl) */
+    background-color: var(--card-ptero) !important; 
+}
+
+/* 2. Os links dentro do menu */
+.user-dropdown a {
+    color: #d1d5db !important; /* Cor do texto */
+}
+
+/* 3. Efeito ao passar o mouse nos itens */
+.user-dropdown a:hover {
+    background-color: var(--card-dark) !important; /* Fica mais escuro ao passar o mouse */
+    color: #fff !important;
+}
+
+.server-layout {
+    padding-left: 5.9rem !important;
+    padding-right: 5.9rem !important;
+}
+
+/* ==========================================================
+   AJUSTE FINO DOS ÍCONES (Tamanho e Espaço)
+   ========================================================== */
+
+.res-header i {
+    /* 1. TAMANHO DO ÍCONE */
+    font-size: 1.1rem !important;  /* Aumente para 1.2rem, 1.3rem, etc. */
+    
+    /* 2. ESPAÇAMENTO (Distância entre ícone e texto) */
+    margin-right: 12px !important; /* Aumente os pixels para afastar mais */
+    
+    /* 3. COR (Opcional: se quiser destacar o ícone) */
+    /* color: #aaa !important; */
+    
+    /* 4. ALINHAMENTO VERTICAL (Caso pareça torto) */
+    position: relative;
+    top: 1px; 
+}
+/* ==========================================================
+   BLOQUEIO DE ARRASTO DA LOGO
+   ========================================================== */
+.logo {
+    /* Impede seleção de texto/imagem (ficar azul) */
+    user-select: none;
+    -webkit-user-select: none; /* Chrome/Safari */
+    -moz-user-select: none; /* Firefox */
+    
+    /* Impede o arrasto da imagem */
+    -webkit-user-drag: none;
+    
+    /* Garante que o clique ainda funcione para o link */
+    pointer-events: auto; 
+}
+
+/* Opcional: Garante que o link em volta também não seja arrastado */
+.logo-area a {
+    -webkit-user-drag: none;
+}

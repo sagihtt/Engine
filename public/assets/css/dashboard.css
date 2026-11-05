@@ -1,0 +1,972 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600&display=swap");
+
+:root {
+  --bg: #0a0a0a;
+  --panel: #121212;
+  --metal: #f1f1f1;
+  --metal-dim: #bdbdbd;
+  --border: #1f1f1f;
+  --hover: #1e1e1e;
+  --accent: #ff4081; /* Rosa Neon */
+  --accent2: #7c4dff; /* Roxo/Azul Neon */
+}
+/* Animação de Entrada */
+.main { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+/* ==========================================================
+   MODO INDUSTRIAL (CLEAN MODE - SEM NEON)
+   ========================================================== */
+body.clean-mode {
+    /* Sobrescreve as cores Neon por tons de Metal/Branco */
+    --accent: #d4d4d4;   /* Cinza Claro */
+    --accent2: #ffffff;  /* Branco Puro */
+    
+    /* Remove sombras coloridas */
+    --kpi-glow: none; 
+}
+
+/* Ajustes específicos para o Modo Clean */
+body.clean-mode .kpi-glow {
+    display: none; /* Remove a bolinha de luz atrás dos cards */
+}
+
+body.clean-mode .kpi-value.val-pos { color: #fff; } /* Remove verde */
+body.clean-mode .kpi-value.val-neg { color: #ccc; } /* Remove vermelho */
+body.clean-mode .status-badge { 
+    background: #333; color: #fff; border: 1px solid #555; text-shadow: none; box-shadow: none; 
+}
+
+/* Gráficos ficam monocromáticos */
+body.clean-mode .progress-bar-fill {
+    background: #fff; box-shadow: none;
+}
+
+/* ==========================================================
+   1. BASE & RESET (CORREÇÃO DE MARGENS "ANTI-PULO")
+   ========================================================== */
+html {
+  /* O SEGREDO: Reserva o espaço da barra de rolagem SEMPRE.
+     Isso impede que a página pule para o lado ao trocar entre Dashboard (longa) e Relatórios (curta). */
+  overflow-y: scroll;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Fira Sans", sans-serif;
+  background-color: #0a0a0a;
+  color: var(--metal);
+
+  /* Grid Background Tech (Sutil) */
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  
+  /* Espaço para a Navbar Fixa + Respiro extra */
+  padding-top: 110px;
+  padding-bottom: 60px;
+
+  /* --- BLOQUEAR SELEÇÃO DE TEXTO (EFEITO APP) --- */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ==========================================================
+   2. NAVBAR (Correção de Alinhamento)
+   ========================================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #181818;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  height: 80px;
+  z-index: 1000;
+
+  /* MUDANÇA 1: Removemos o padding e o justify daqui */
+  display: block;
+  padding: 0;
+}
+
+.navbar-content {
+  width: 100%;
+  max-width: 1400px; /* Mesma largura máxima do container */
+  height: 100%;
+
+  /* MUDANÇA 2: Centralizamos e aplicamos o padding AQUI dentro */
+  margin: 0 auto;
+  padding: 0 2rem; /* Agora bate exato com o .dashboard-container */
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left-area {
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  width: 150px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  -webkit-user-drag: none;
+  display: block;
+}
+.logo:hover {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+/* (O resto do CSS da navbar continua igual...) */
+.nav-item,
+.date-nav {
+  color: #bdbdbd;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 300;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0.5rem 0;
+}
+
+.nav-item:hover,
+.date-nav:hover,
+.nav-item.active {
+  color: #ffffff;
+  transform: translateY(-1px);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.nav-item i,
+.date-nav i {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+.nav-item:hover i {
+  opacity: 1;
+}
+.date-nav span {
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- USER MENU --- */
+.user-menu {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  cursor: pointer;
+  font-family: "Fira Sans", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  transition: all 0.25s ease;
+}
+.user-btn:hover {
+  color: #ffffff;
+  transform: scale(1.02);
+}
+.caret {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* DROPDOWN DO USUÁRIO */
+.user-dropdown {
+  top: 90px !important;
+  position: absolute !important;
+  right: 0;
+  background: #181818;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 9999;
+}
+
+.user-dropdown:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-dropdown a {
+  text-decoration: none;
+  color: #bdbdbd;
+  font-weight: 300;
+  font-size: 0.9rem;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #222;
+}
+.user-dropdown a:last-child {
+  border-bottom: none;
+}
+.user-dropdown a:hover {
+  background: #1f1f1f;
+  color: #fff;
+  padding-left: 1.4rem;
+}
+.user-dropdown .logout:hover {
+  background: rgba(255, 76, 76, 0.05);
+  color: #ff7777;
+}
+
+/* ==========================================================
+   3. LAYOUT & DASHBOARD COMPONENTS
+   ========================================================== */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  gap: 3rem;
+}
+
+/* TÍTULOS COM ANIMAÇÃO NEON */
+.chart-section-title,
+.registros-title {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 300;
+  font-size: 1.8rem;
+  color: #fff;
+  letter-spacing: 1px;
+  margin: 0;
+  padding-bottom: 0.8rem;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.chart-section-title::after,
+.registros-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    var(--accent2),
+    transparent
+  );
+  box-shadow: 0 0 15px var(--accent);
+  width: 0%;
+  animation: neonGrow 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes neonGrow {
+  to {
+    width: 100%;
+  }
+}
+
+/* COMPONENTES VISUAIS (Flat & Clean) */
+.kpi-card,
+.chart-block,
+.table-wrapper {
+  background: var(--panel);
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.kpi-card:hover,
+.chart-block:hover,
+.table-wrapper:hover {
+  transform: translateY(-4px);
+  background-color: #1a1a1a;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+/* --- KPI GRID --- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+.kpi-card {
+  padding: 1.8rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.kpi-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+.kpi-card:hover .kpi-glow {
+  opacity: 1;
+  box-shadow: 0 0 15px var(--accent);
+}
+
+.kpi-title {
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.8rem;
+}
+.kpi-value {
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: #fff;
+  z-index: 2;
+}
+.kpi-icon {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.04);
+  transform: rotate(-10deg);
+  transition: all 0.4s ease;
+}
+.kpi-card:hover .kpi-icon {
+  color: rgba(255, 255, 255, 0.1);
+  transform: rotate(0deg) scale(1.1);
+}
+
+.val-pos {
+  color: var(--accent2) !important;
+  text-shadow: 0 0 20px rgba(124, 77, 255, 0.5);
+}
+.val-neg {
+  color: var(--accent) !important;
+  text-shadow: 0 0 20px rgba(255, 64, 129, 0.5);
+}
+.val-neutral {
+  color: #fff !important;
+}
+
+/* --- GRÁFICOS --- */
+.charts-container {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+}
+
+.chart-block {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 440px;
+}
+
+.chart-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.chart-header span {
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.user-icon,
+.global-icon {
+  width: 24px;
+  height: 24px;
+  stroke: url(#grad1);
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+}
+
+.chart-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2rem;
+}
+.chart-canvas-wrapper {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  flex-shrink: 0;
+}
+.chart-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 1.6rem;
+  pointer-events: none;
+}
+.chart-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  color: #ccc;
+  font-weight: 300;
+  font-size: 1rem;
+  width: 100%;
+}
+.chart-info p {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #222;
+  padding-bottom: 0.4rem;
+}
+
+.status-badge {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 2px;
+  margin-left: auto;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.status-overclock {
+  background: rgba(124, 77, 255, 0.15);
+  color: #b388ff;
+  border: 1px solid rgba(124, 77, 255, 0.3);
+}
+.status-lagging {
+  background: rgba(255, 64, 129, 0.15);
+  color: #ff80ab;
+  border: 1px solid rgba(255, 64, 129, 0.3);
+}
+.status-stable {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ccc;
+  border: 1px solid #333;
+}
+
+.chart-block.full-width {
+  width: 100% !important;
+  max-width: 100%;
+  min-height: 400px;
+  box-sizing: border-box;
+}
+.chart-canvas-wrapper.wide {
+  width: 100%;
+  height: 320px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- XP BAR --- */
+.progress-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.progress-label {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+.progress-bar-bg {
+  width: 100%;
+  height: 24px;
+  background: #111;
+  border: none !important;
+  border-radius: 0 !important;
+}
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 0 !important;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 20px rgba(124, 77, 255, 0.3);
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --- TABELA --- */
+.table-wrapper {
+  width: 100%;
+  padding: 0;
+  overflow-x: auto;
+}
+
+#registrosTable {
+  width: 100%;
+  border-collapse: collapse;
+  color: #f1f1f1;
+  table-layout: fixed;
+}
+#registrosTable th,
+#registrosTable td {
+  padding: 1.2rem 1rem;
+  text-align: center;
+  font-weight: 300;
+}
+
+#registrosTable th {
+  color: #888;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  background: #151515;
+  letter-spacing: 1.2px;
+  border-bottom: 2px solid #222;
+}
+
+#registrosTable td {
+  border-bottom: 1px solid #1a1a1a;
+  transition: background 0.2s;
+}
+#registrosTable tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+}
+
+#registrosTable th:nth-child(1) {
+  width: 15%;
+}
+#registrosTable th:nth-child(2) {
+  width: 25%;
+  text-align: left;
+  padding-left: 2rem;
+}
+#registrosTable td:nth-child(2) {
+  text-align: left;
+  padding-left: 2rem;
+}
+
+/* Permite copiar dados da tabela */
+#registrosTable td {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* ==========================================================
+   4. BOTÃO CARREGAR MAIS (ESTILO INDUSTRIAL RETO)
+   ========================================================== */
+.load-more-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* Adicionei margem para separar da tabela, criando um bloco único */
+  margin-top: 0rem;
+  padding-bottom: 3rem;
+}
+
+.btn-load-more {
+  background: #181818; /* Fundo mais escuro */
+  color: #888; /* Texto discreto */
+
+  /* BORDA COMPLETA E RETA */
+  border: none;
+  border-radius: 0 !important; /* REMOVE ARREDONDAMENTO */
+
+  /* Tamanho mais largo e imponente */
+  width: 150px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  /* Tipografia estilo Engine */
+  font-family: "Fira Sans", sans-serif;
+  font-size: 1.2rem;
+  text-transform: uppercase; /* Caixa alta fica mais técnico */
+  letter-spacing: 2px;
+}
+
+.btn-load-more:hover {
+  background: #1f1f1f;
+  border-color: #555;
+  color: #fff;
+  transform: translateY(-2px); /* Leve flutuação */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.btn-load-more:hover i {
+  /* O ícone (+) brilha com o gradiente Neon */
+  background: #f1f1f1;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px rgba(241, 241, 241, 1));
+}
+
+.btn-load-more:active {
+  transform: translateY(0);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================
+   5. CALENDÁRIOS (ESTILOS COMPARTILHADOS)
+   ========================================================== */
+
+/* Visual Base (Sem posição) */
+.daterangepicker {
+  background-color: #181818 !important;
+  border: 1px solid #333 !important;
+  font-family: "Fira Sans", sans-serif !important;
+  color: #fff !important;
+  border-radius: 0 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
+
+  /* width: auto impede o "fantasma" que cobre a tela */
+  /* ATENÇÃO: Aqui removemos largura fixa para deixar o tema controlar */
+  /* width: auto !important; */
+
+  z-index: 99999 !important;
+}
+
+/* Cores Internas */
+.daterangepicker .calendar-table {
+  background-color: #181818 !important;
+  border: none !important;
+}
+.daterangepicker td.off,
+.daterangepicker td.off.in-range {
+  background-color: #181818 !important;
+  color: #444 !important;
+}
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
+  background-color: var(--accent2) !important;
+  color: #fff !important;
+}
+.daterangepicker td:hover {
+  background-color: #333 !important;
+}
+.daterangepicker .drp-buttons {
+  border-top: 1px solid #333 !important;
+}
+.daterangepicker::before,
+.daterangepicker::after {
+  display: none !important;
+}
+
+/* CLASSE DASHBOARD: Fica preso no topo da tela */
+.drp-dashboard-mode {
+  position: fixed !important;
+  top: 85px !important;
+  margin-top: 0 !important;
+}
+
+/* CLASSE RELATÓRIOS: Fica preso ao botão e rola com a página */
+.drp-reports-mode {
+  position: absolute !important;
+  margin-top: 8px !important;
+}
+
+/* ==========================================================
+   6. RESPONSIVIDADE (MOBILE & TABLET) - O GRANDE FIX
+   ========================================================== */
+@media (max-width: 1024px) {
+  /* Navbar */
+  .navbar-content {
+    padding: 0 1rem;
+  }
+  .logo {
+    width: 120px;
+  }
+  .nav-item span,
+  .date-nav span,
+  .user-btn span {
+    display: none;
+  }
+  .nav-item i,
+  .date-nav i,
+  .user-btn i {
+    font-size: 1.5rem;
+  }
+  .left-area {
+    gap: 1rem;
+  }
+  .nav-links {
+    gap: 0.7rem;
+  }
+
+  /* Layout */
+  .dashboard-container {
+    padding: 0 1rem;
+    gap: 2rem;
+    overflow-x: hidden;
+  }
+
+  /* Gráficos */
+  .charts-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .chart-block {
+    min-width: 0 !important;
+    width: 100%;
+    padding: 1.5rem 1rem;
+  }
+  .chart-layout {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .chart-info {
+    width: 100%;
+  }
+
+  /* --- TABELA OTIMIZADA (3 COLUNAS) --- */
+  .table-wrapper {
+    width: 100%;
+    border: 1px solid #222;
+    box-shadow: none;
+    overflow-x: hidden;
+  }
+
+  #registrosTable {
+    min-width: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  /* Esconde Colunas (Email, Duração, Mês, Semana) */
+  #registrosTable th:nth-child(2),
+  #registrosTable td:nth-child(2),
+  #registrosTable th:nth-child(5),
+  #registrosTable td:nth-child(5),
+  #registrosTable th:nth-child(6),
+  #registrosTable td:nth-child(6),
+  #registrosTable th:nth-child(7),
+  #registrosTable td:nth-child(7) {
+    display: none;
+  }
+
+  /* Esconde Data na Saída */
+  .desktop-date-part {
+    display: none;
+  }
+
+  /* Formatação das 3 Colunas (Matrícula, Entrada, Saída) */
+  #registrosTable th:nth-child(1),
+  #registrosTable td:nth-child(1),
+  #registrosTable th:nth-child(3),
+  #registrosTable td:nth-child(3),
+  #registrosTable th:nth-child(4),
+  #registrosTable td:nth-child(4) {
+    width: 33.33% !important;
+    text-align: center !important;
+    padding: 1rem 0.2rem !important;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  /* KPIs */
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* --- CALENDÁRIO MOBILE (CORREÇÃO DE POSIÇÃO) --- */
+  .drp-dashboard-mode {
+    /* Fixa em 96% da tela com 2% de margem na esquerda */
+    left: 2% !important;
+    width: 96% !important;
+
+    /* Remove o transform que estava jogando ele pra fora */
+    transform: none !important;
+
+    top: 85px !important;
+  }
+  /* ... (restante do código mobile anterior) ... */
+
+  /* --- CORREÇÃO DO BOTÃO "CARREGAR MAIS" NO MOBILE --- */
+  .dashboard-container {
+    /* Aumenta o espaço no fundo para o botão não ficar cortado */
+    padding-bottom: 150px;
+  }
+
+  .load-more-container {
+    width: 100%;
+    margin-top: 1rem;
+    padding-bottom: 2rem;
+    /* Garante que o container esteja visível */
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .btn-load-more {
+    /* No celular, o botão fica um pouco mais largo para facilitar o toque */
+    width: 100px !important;
+    height: 40px; /* Um pouco mais alto para o dedo */
+    font-size: 1rem !important;
+    letter-spacing: 1px;
+  }
+} /* <--- Fim do @media */
+
+/* ==========================================================
+   OVERRIDES DO MODO INDUSTRIAL (CLEAN MODE) - SEM BORDAS #333
+   ========================================================== */
+
+/* 1. CONTAINER & FUNDO */
+body.clean-mode .daterangepicker {
+    background-color: #1a1a1a !important;
+    border: none !important; /* REMOVIDA A BORDA EXTERNA */
+    color: #ccc !important;
+    box-shadow: 0 20px 60px #000000 !important; /* Sombra mais forte para compensar a falta de borda */
+}
+
+/* Remove setinhas */
+body.clean-mode .daterangepicker:before,
+body.clean-mode .daterangepicker:after {
+    display: none !important;
+}
+
+/* 2. MENU LATERAL (RANGES) */
+body.clean-mode .daterangepicker .ranges {
+    background-color: #111 !important;
+    border-right: none !important; /* REMOVIDA A DIVISÓRIA */
+    margin-top: 0 !important;
+}
+
+body.clean-mode .daterangepicker .ranges li {
+    color: #888 !important;
+}
+
+body.clean-mode .daterangepicker .ranges li:hover {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+body.clean-mode .daterangepicker .ranges li.active {
+    background-color: #333 !important;
+    color: #fff !important;
+    border: none !important; /* REMOVIDA BORDA DO ITEM ATIVO */
+}
+
+/* 3. CALENDÁRIO (CÉLULAS) */
+body.clean-mode .daterangepicker th.month {
+    color: #fff !important;
+}
+
+body.clean-mode .daterangepicker th {
+    color: #666 !important;
+}
+
+body.clean-mode .daterangepicker td.available {
+    color: #bbb !important;
+}
+
+body.clean-mode .daterangepicker td.available:hover {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+body.clean-mode .daterangepicker td.off {
+    background-color: transparent !important;
+    color: #333 !important;
+}
+
+/* --- SELEÇÃO --- */
+body.clean-mode .daterangepicker td.active, 
+body.clean-mode .daterangepicker td.start-date, 
+body.clean-mode .daterangepicker td.end-date {
+    background-color: #555 !important; 
+    color: #fff !important;
+}
+
+body.clean-mode .daterangepicker td.in-range:not(.start-date):not(.end-date) {
+    background-color: #262626 !important;
+    color: #999 !important;
+}
+
+/* 4. DIVISÓRIAS INTERNAS */
+body.clean-mode .daterangepicker .drp-calendar.left {
+    border-bottom: none !important; /* Mobile */
+    border-right: none !important;  /* Desktop */
+}
+
+/* 5. RODAPÉ E BOTÕES */
+body.clean-mode .daterangepicker .drp-buttons {
+    background-color: #1a1a1a !important;
+    border-top: none !important; /* REMOVIDA A LINHA ACIMA DOS BOTÕES */
+}
+
+/* Botão Aplicar */
+body.clean-mode .daterangepicker .applyBtn {
+    background-color: #ccc !important;
+    color: #000 !important;
+    border: none !important;
+}
+body.clean-mode .daterangepicker .applyBtn:hover {
+    background-color: #fff !important;
+}
+
+/* Botão Cancelar */
+body.clean-mode .daterangepicker .cancelBtn {
+    background-color: transparent !important;
+    color: #888 !important;
+    border: none !important; /* REMOVIDA BORDA DO CANCELAR */
+}
+body.clean-mode .daterangepicker .cancelBtn:hover {
+    color: #ccc !important;
+    background-color: #222 !important; /* Fundo suave ao passar o mouse */
+}

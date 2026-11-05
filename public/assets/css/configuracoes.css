@@ -1,0 +1,744 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600&display=swap");
+
+:root {
+  --bg: #0a0a0a;
+  --panel: #121212;
+  --metal: #f1f1f1;
+  --metal-dim: #bdbdbd;
+  --border: #1f1f1f;
+  --hover: #1e1e1e;
+  --accent: #ff4081;
+  --accent2: #7c4dff;
+  --placeholder: rgba(241, 241, 241, 0.45);
+}
+
+/* No CLEAN MODE, mudamos APENAS as cores de destaque (ícones/neon), 
+   mas mantemos o fundo PRETO (Industrial) conforme solicitado. */
+body.clean-mode {
+  --accent: #d4d4d4; /* Cinza Claro (Neon) */
+  --accent2: #ffffff; /* Branco Puro (Ícones) */
+}
+
+/* ==========================================================
+   1. BASE & RESET (Mundo Tech Grid)
+   ========================================================== */
+html {
+  overflow-y: scroll;
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Fira Sans", sans-serif;
+  background-color: #0a0a0a;
+  color: var(--metal);
+
+  /* Tech Grid Background (Fixo) */
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-attachment: fixed;
+
+  padding-top: 110px;
+  padding-bottom: 60px;
+
+  /* Centraliza o conteúdo se a tela for muito grande */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ==========================================================
+   2. NAVBAR (Fixa e Compacta)
+   ========================================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #181818;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  height: 80px;
+  z-index: 1000;
+  display: block;
+  padding: 0;
+}
+.navbar-content {
+  width: 100%;
+  max-width: 1400px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.left-area {
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  width: 150px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  -webkit-user-drag: none;
+}
+.logo:hover {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.nav-item {
+  color: #bdbdbd;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 300;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0.5rem 0;
+}
+.nav-item:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+.nav-item i {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* User Menu */
+.avatar-container {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 0.5rem;
+  border: 2px solid #333;
+}
+.avatar-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.user-menu {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  cursor: pointer;
+  font-family: "Fira Sans", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  transition: all 0.25s ease;
+}
+.user-btn:hover {
+  color: #ffffff;
+  transform: scale(1.02);
+}
+
+.user-dropdown {
+  top: 90px !important;
+  position: absolute !important;
+  right: 0;
+  background: #181818;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s;
+  z-index: 9999;
+}
+.user-dropdown:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.user-dropdown a {
+  text-decoration: none;
+  color: #bdbdbd;
+  font-weight: 300;
+  font-size: 0.9rem;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #222;
+}
+.user-dropdown a:last-child {
+  border-bottom: none;
+}
+.user-dropdown a:hover {
+  background: #1f1f1f;
+  color: #fff;
+  padding-left: 1.4rem;
+}
+
+/* ==========================================================
+   3. LAYOUT INOVADOR (Centralizado e Compacto)
+   ========================================================== */
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  /* Animação suave de entrada */
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Título */
+.settings-title {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 300;
+  font-size: 1.8rem;
+  color: #fff;
+  letter-spacing: 1px;
+  margin-bottom: 3rem;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+/* Neon Underline */
+.settings-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    var(--accent2),
+    transparent
+  );
+  box-shadow: 0 0 15px var(--accent);
+  width: 0%;
+  animation: neonGrow 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.3s;
+}
+@keyframes neonGrow {
+  to {
+    width: 100%;
+  }
+}
+
+/* GRID REVITALIZADO: 
+   Não usa grid de colunas esticadas. Usa Flexbox centralizado.
+   Os cards são "Monólitos" lado a lado.
+*/
+.settings-grid {
+  display: flex;
+  justify-content: center;
+  align-items: stretch; /* Garante mesma altura */
+  gap: 3rem; /* Espaço generoso entre os blocos */
+  flex-wrap: wrap; /* Cai pra baixo no mobile */
+  width: 100%;
+}
+
+/* O "Monólito" (Card) */
+.settings-card {
+  /* Estética LOGIN.CSS */
+  background: #121212; /* Fundo fixo Dark */
+  border: none;
+  border-radius: 0; /* Flat absoluto */
+  padding: 2.5rem 2rem;
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.8); /* Sombra difusa igual login */
+
+  /* Dimensões Controladas */
+  width: 100%;
+  max-width: 360px; /* Um pouco mais largo que login (320px) para caber infos */
+  min-height: 480px; /* Altura mínima para forçar alinhamento */
+
+  display: flex;
+  flex-direction: column; /* Para alinhar o botão no fundo */
+  transition: box-shadow 0.3s ease; /* Apenas sombra anima, cor não */
+}
+
+/* Hover sutil apenas na sombra */
+.settings-card:hover {
+  box-shadow: 0 0 60px rgba(0, 0, 0, 1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+.icon-header {
+  font-size: 1.5rem;
+  color: var(--accent2);
+}
+.card-header h3 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.card-desc {
+  color: var(--metal-dim);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Ocupa todo espaço restante */
+}
+
+/* ==========================================================
+   4. INPUTS E BOTÕES (CÓPIA FIEL DO LOGIN.CSS)
+   ========================================================== */
+
+.input-label {
+  display: block;
+  color: #666;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: 300;
+}
+
+/* Input Group: 100% fiel ao login */
+.input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #181818 !important; /* Fixo Dark */
+  border: none;
+  border-radius: 0;
+
+  margin: 0 auto 1.5rem auto; /* Centralização */
+  width: 85%; /* Largura relativa ao card */
+  max-width: 280px;
+  height: 45px;
+  padding: 0 0.8rem;
+
+  transition: background-color 0.25s ease, box-shadow 0.25s ease,
+    border-color 0.3s ease;
+}
+
+/* Efeito de Foco (Único momento que muda cor/borda) */
+.input-group:focus-within {
+  background-color: #1f1f1f !important;
+  /* Opcional: Adicionar uma borda sutil ou brilho se quiser, mas o login é clean */
+}
+
+.input-group .icon {
+  color: var(--metal);
+  margin-right: 0.6rem;
+  font-size: 1.1rem;
+}
+.input-group input {
+  background: transparent !important;
+  border: none;
+  outline: none;
+  color: var(--metal);
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 300;
+  font-family: "Fira Sans", sans-serif;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  letter-spacing: 0.3px;
+}
+.input-group input::placeholder {
+  color: var(--placeholder);
+}
+
+.input-group.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Botões: Tamanho e Posição */
+.action-row {
+  display: flex;
+  justify-content: center;
+  margin-top: auto; /* EMPURRA O BOTÃO PARA O FINAL DO CARD (ALINHAMENTO) */
+  padding-top: 1rem;
+}
+
+.btn-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Dimensões EXATAS do Login */
+  width: 130px;
+  height: 40px;
+
+  background-color: #181818 !important; /* Fixo Dark */
+  color: var(--metal);
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  outline: none;
+}
+
+.btn-login:hover {
+  transform: scale(1.07);
+  background-color: #1f1f1f !important;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+}
+.btn-login:active {
+  transform: scale(0.985);
+}
+
+/* Upload Foto */
+.photo-upload-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+.photo-preview-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #181818;
+  padding: 1rem 1.5rem;
+}
+.photo-preview-box img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #333;
+}
+
+.btn-upload {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 1.3rem;
+  transition: all 0.2s ease;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.btn-upload:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+.btn-upload input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   5. MODO CLEAN (APENAS DETALHES, SEM MUDAR FUNDO)
+   ========================================================== */
+/* O Clean Mode altera apenas a cor do NEON do título e ÍCONES */
+body.clean-mode .settings-title::after {
+  background: linear-gradient(
+    90deg,
+    var(--metal),
+    var(--metal-dim),
+    transparent
+  );
+  box-shadow: 0 0 15px var(--metal);
+}
+/* No resto, os cards continuam pretos (#121212) e inputs (#181818) */
+
+/* ==========================================================
+   6. 2FA (Integração com Design System)
+   ========================================================== */
+.btn-2fa-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #181818;
+  padding: 10px 15px;
+  margin-top: 1rem;
+  border: 1px solid transparent;
+  transition: 0.3s;
+}
+/* Botãozinho menor para ativar 2FA */
+.btn-small {
+  width: auto;
+  padding: 0 1.2rem;
+  height: 35px;
+  font-size: 0.9rem;
+  background: #222;
+  color: var(--accent2);
+  border: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+}
+.btn-small:hover {
+  background: var(--accent2);
+  color: #fff;
+  border-color: var(--accent2);
+}
+
+/* ==========================================================
+   7. MODAL & TOASTS
+   ========================================================== */
+.hidden {
+  display: none !important;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-box {
+  background: #121212;
+  border: none;
+  padding: 2rem;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 0 60px #000;
+}
+.modal-header i {
+  font-size: 3rem;
+  color: var(--accent2);
+  margin-bottom: 10px;
+}
+.modal-header h2 {
+  color: #fff;
+  font-weight: 400;
+  margin: 0 0 1rem 0;
+  font-size: 1.4rem;
+}
+.modal-desc {
+  color: #888;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.modal-actions button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.btn-cancel {
+  background-color: #181818 !important; /* Fixo Dark */
+  color: var(--metal);
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 100;
+  font-size: 1.05rem;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.btn-cancel:hover {
+  background-color: #1f1f1f !important;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+}
+
+.btn-confirm {
+  background-color: var(--accent2) !important; /* Fixo Dark */
+  color: var(--metal);
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 100;
+  font-size: 1.05rem;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.btn-confirm:hover {
+  background-color: var(--accent2) !important;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+}
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  min-width: 300px;
+  background: #181818;
+  color: #fff;
+  padding: 1rem 1.2rem;
+  border-left: 4px solid #333;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.95rem;
+  animation: slideIn 0.3s forwards;
+  pointer-events: auto;
+}
+.toast.success {
+  border-color: #2cff05;
+}
+.toast.success i {
+  color: #2cff05;
+}
+.toast.error {
+  border-color: #ff0000;
+}
+.toast.error i {
+  color: #ff0000;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+/* Autofill e validação visual */
+.input-group.valid {
+  border-color: #2cff05 !important;
+}
+.input-group.invalid {
+  border-color: #ff0000 !important;
+}
+.input-group.valid .icon {
+  color: #2cff05;
+}
+.input-group.invalid .icon {
+  color: #ff073a;
+}
+
+/* Mobile */
+
+/* ==========================================================
+   6. RESPONSIVIDADE (MOBILE & TABLET) - O GRANDE FIX
+   ========================================================== */
+@media (max-width: 1024px) {
+  .settings-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .settings-card {
+    width: 100%;
+    max-width: 320px;
+    min-height: auto;
+  }
+  .navbar-content {
+    padding: 0 1rem;
+  }
+
+  /* Navbar */
+  .navbar-content {
+    padding: 0 1rem;
+  }
+  .logo {
+    width: 120px;
+  }
+  .nav-item span,
+  .date-nav span,
+  .user-btn span {
+    display: none;
+  }
+  .nav-item i,
+  .date-nav i,
+  .user-btn i {
+    font-size: 1.5rem;
+  }
+  .left-area {
+    gap: 1rem;
+  }
+  .nav-links {
+    gap: 0.7rem;
+  }
+}

@@ -1,0 +1,160 @@
+/* ==========================================================
+   ENGINE LABS - RELATÓRIOS (V-FINAL: MOBILE CENTERED)
+   ========================================================== */
+
+/* Animação de Entrada */
+.main { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+/* --- GRID DE LAYOUT (DESKTOP: 750px FIXO) --- */
+.reports-layout {
+    display: grid;
+    /* Coluna 1 fixa em 750px para casar com o calendário do tema */
+    grid-template-columns: 750px 1fr; 
+    gap: 3rem;
+    align-items: start;
+}
+
+.calendar-column, .actions-column { display: flex; flex-direction: column; }
+.calendar-column { gap: 2rem; }
+.actions-column { gap: 1.5rem; }
+
+/* --- ESTILO "PAD" (CONTROL CARD) --- */
+.control-card {
+    background: var(--panel);
+    padding: 1.5rem 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    
+    border-radius: 0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    
+    /* SEM BORDAS */
+    border: none !important; 
+    
+    /* Garante que o botão preencha a coluna */
+    width: 100%;
+    box-sizing: border-box;
+    
+    cursor: pointer; position: relative; z-index: 10;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.control-card:hover {
+    transform: translateY(-4px);
+    background-color: #1a1a1a;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+/* Ícones & Textos (CORES PADRÃO NEON) */
+.card-icon {
+    font-size: 2rem; color: var(--accent2); 
+    filter: drop-shadow(0 0 10px rgba(124, 77, 255, 0.3));
+    display: flex; align-items: center;
+}
+.team-icon i { color: #00e676; filter: drop-shadow(0 0 10px rgba(0, 230, 118, 0.3)); }
+.pdf-icon i  { color: var(--accent); filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.3)); }
+.csv-icon i  { color: #29b6f6; filter: drop-shadow(0 0 10px rgba(41, 182, 246, 0.3)); }
+
+.card-content { flex: 1; display: flex; flex-direction: column; gap: 0.2rem; }
+.card-value { font-size: 1.1rem; color: #fff; font-weight: 500; }
+.card-label { font-size: 0.85rem; color: #777; font-weight: 300; }
+.date-display { font-family: "Fira Sans", monospace; letter-spacing: 0.5px; }
+
+.card-action { color: #444; font-size: 1.2rem; transition: color 0.3s; }
+.control-card:hover .card-action { color: #fff; }
+
+/* --- MINI STATS --- */
+.stats-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.mini-stat {
+    background: rgba(255, 255, 255, 0.02); padding: 1.5rem;
+    border-top: 1px solid #222; display: flex; flex-direction: column; gap: 0.5rem;
+}
+.mini-stat span { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+.mini-stat strong { font-size: 1.8rem; color: #fff; font-weight: 400; }
+
+/* ==========================================================
+   ESTILO DO CALENDÁRIO (DESKTOP)
+   ========================================================== */
+
+.daterangepicker {
+    background-color: #181818 !important;
+    border: 1px solid #333 !important;
+    color: #fff !important;
+    font-family: "Fira Sans", sans-serif !important;
+    border-radius: 0 !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.95) !important;
+    z-index: 99999 !important;
+    
+    /* Posição Absoluta controlada pelo JS */
+    position: absolute !important;
+    margin-top: 5px !important;
+    
+    /* DESKTOP: Largura fixa para bater com o botão */
+    width: 750px !important; 
+    max-width: none !important;
+}
+
+/* Cores internas */
+.daterangepicker .calendar-table { background-color: #181818 !important; border: none !important; }
+.daterangepicker td.off { background-color: #121212 !important; color: #444 !important; }
+.daterangepicker td.active, .daterangepicker td.active:hover { background-color: var(--accent2) !important; color: #fff !important; }
+.daterangepicker td:hover { background-color: #333 !important; }
+.daterangepicker .drp-buttons { border-top: 1px solid #333 !important; }
+.daterangepicker .ranges li:hover { background-color: #333 !important; }
+.daterangepicker .ranges li.active { background-color: var(--accent2) !important; }
+
+.daterangepicker::before, .daterangepicker::after { display: none !important; }
+
+/* ==========================================================
+   MOBILE & RESPONSIVIDADE (A CORREÇÃO FINAL)
+   ========================================================== */
+@media (max-width: 900px) {
+    
+    /* 1. Layout vira 1 Coluna */
+    .reports-layout {
+        grid-template-columns: 1fr; /* Ocupa 100% */
+        gap: 2rem;
+        padding-bottom: 150px; /* Garante que o último botão não seja cortado */
+    }
+    
+    /* 2. Calendário Mobile (Centralização Robusta) */
+    .daterangepicker {
+        /* Largura quase total */
+        width: 96% !important; 
+        max-width: 100% !important;
+        
+        /* CENTRALIZAÇÃO SIMPLES (Sem transform) */
+        left: 2% !important; /* 96% width + 2% esquerda + 2% direita = 100% */
+        right: auto !important;
+        
+        /* Remove o transform que estava bugando a posição */
+        transform: none !important;
+        
+        /* Deixa o JS controlar o Top (embaixo do botão) ou use 'auto' */
+        /* top: auto !important; */
+    }
+}
+
+/* ==========================================================
+   OVERRIDES MODO INDUSTRIAL (CLEAN MODE) - ÍCONES
+   (Adicionado para tornar os ícones brancos)
+   ========================================================== */
+
+/* Remove as cores Verde/Rosa/Azul e força Branco quando clean-mode está ativo */
+body.clean-mode .team-icon i,
+body.clean-mode .pdf-icon i,
+body.clean-mode .csv-icon i {
+    color: #ffffff !important;       /* Branco Puro */
+    filter: none !important;         /* Remove brilho/sombra colorida */
+    text-shadow: none !important;    /* Remove text-shadow se houver */
+}
+
+/* Ajusta o container do ícone para ser discreto */
+body.clean-mode .card-icon {
+    color: #ffffff !important;
+    filter: none !important;
+}
+

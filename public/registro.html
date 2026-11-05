@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ponto - Engine</title>
+
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/dashboard.css" />
+    <link rel="stylesheet" href="assets/css/terminal.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://unpkg.com/phosphor-icons"></script>
+
+    <style>
+      /* =========================================
+         LAYOUT GERAL & FUNDO
+         ========================================= */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+
+        /* O !important GARANTE que essa cor vença qualquer CSS externo */
+        background-color: #0a0a0a !important;
+        background-image: none !important; /* Remove imagens de fundo indesejadas */
+      }
+
+      /* =========================================
+         GRID OVERLAY (Fica por cima do form)
+         ========================================= */
+      .grid-overlay {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        /* LINHAS DO GRID */
+        background-image: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+          );
+        background-size: 40px 40px;
+
+        z-index: 15;
+        pointer-events: none;
+      }
+
+      /* =========================================
+         NAVBAR
+         ========================================= */
+      .navbar {
+        background-color: #181818 !important;
+        z-index: 20;
+        position: relative;
+      }
+      /* =========================================
+         3. NAVBAR E ALINHAMENTO (CORRIGIDO)
+         ========================================= */
+      .navbar {
+        background-color: #181818 !important;
+        z-index: 20;
+        position: relative;
+        height: 80px; /* Força a altura exata da barra */
+      }
+
+      /* =========================================
+         3. NAVBAR E ALINHAMENTO
+         ========================================= */
+      .navbar-content {
+        /* ESQUERDA: 30px (Igual ao resto) */
+        padding-left: 25px;
+
+        /* DIREITA: 50px (30px padrão + 20px para compensar a falta da barra de rolagem) */
+        /* Se ainda estiver muito longe, diminua para 45px. Se muito perto, aumente para 55px */
+        padding-right: 40px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      /* Grupo da Direita (Usuário) */
+      .user-menu {
+        /* A MÁGICA: Isso força o menu a ir para a extrema direita */
+        margin-left: auto;
+
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      /* =========================================
+         DROPDOWN MENU (CORRIGIDO)
+         ========================================= */
+      /* Força o menu a ter a mesma cor da Navbar */
+      .user-dropdown {
+        background-color: #181818 !important;
+      }
+
+      /* Cor dos links dentro do dropdown */
+      .user-dropdown a {
+        color: #e5e7eb !important; /* Texto claro */
+        transition: background 0.2s;
+      }
+
+      /* Cor ao passar o mouse (Hover) */
+      .user-dropdown a:hover {
+        background-color: #252525 !important; /* Um cinza levemente mais claro */
+      }
+      /* =========================================
+         CONTAINER FLUTUANTE
+         ========================================= */
+      .form-container {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        background-color: transparent;
+        border: none;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* =========================================
+         IFRAME (GOOGLE FORMS) - CORREÇÃO DE COR
+         ========================================= */
+      .google-form-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+
+        /* A CORREÇÃO NUCLEAR: */
+        /* 1. grayscale(1): Remove TODA a cor (mata o azul/roxo do Google) */
+        /* 2. invert(1): Inverte Branco para Preto */
+        /* 3. contrast(0.9): Ajuste fino para não ficar preto "pixel queimado" */
+        filter: grayscale(1) invert(1) contrast(0.9);
+
+        /* Transparência para o fundo #0a0a0a aparecer um pouco */
+        opacity: 1;
+
+        /* Garante fundo transparente no elemento iframe se o browser permitir */
+        background-color: transparent;
+      }
+      /* ==========================================================
+   6. RESPONSIVIDADE (MOBILE & TABLET) - O GRANDE FIX
+   ========================================================== */
+      @media (max-width: 1024px) {
+        /* Navbar */
+        .navbar-content {
+          padding: 0 1rem;
+        }
+        .logo {
+          width: 120px;
+        }
+        .nav-item span,
+        .date-nav span,
+        .user-btn span {
+          display: none;
+        }
+        .nav-item i,
+        .date-nav i,
+        .user-btn i {
+          font-size: 1.5rem;
+        }
+        .left-area {
+          gap: 1rem;
+        }
+        .nav-links {
+          gap: 0.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-overlay"></div>
+
+    <header class="navbar">
+      <div class="navbar-content">
+        <div class="left-area">
+          <div class="logo-area">
+            <a href="/dashboard" style="display: block; text-decoration: none">
+              <img
+                src="assets/img/logo.png"
+                alt="Engine Labs"
+                class="logo"
+                draggable="false"
+              />
+            </a>
+          </div>
+          <nav class="nav-links">
+            <a href="/registro" class="nav-item active"
+              ><i class="ph ph-clock"></i><span>Ponto</span></a
+            >
+            <a href="/dashboard" class="nav-item"
+              ><i class="ph ph-chart-bar"></i><span>Dashboard</span></a
+            >
+            <a href="/relatorios" class="nav-item"
+              ><i class="ph ph-file-text"></i><span>Relatórios</span></a
+            >
+            <a href="/console" class="nav-item"
+              ><i class="ph ph-terminal-window"></i><span>Console</span></a
+            >
+          </nav>
+        </div>
+
+        <div class="user-menu" id="userMenu">
+          <div class="user-btn" id="userBtn" style="cursor: pointer">
+            <div
+              class="avatar-container"
+              style="
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-right: 0.5rem;
+                border: 2px solid #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <img
+                id="userAvatarNav"
+                src="https://ui-avatars.com/api/?name=User&background=333&color=fff"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </div>
+            <span id="userName">Usuário</span>
+            <i class="ph ph-caret-down-fill caret"></i>
+          </div>
+          <div class="user-dropdown hidden" id="userDropdown">
+            <a href="/configuracoes"
+              ><i class="ph ph-gear"></i> Configurações</a
+            >
+            <a href="/logout" class="logout" id="btnLogoutNav"
+              ><i class="ph ph-sign-out"></i> Sair</a
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="form-container">
+      <iframe
+        src="https://docs.google.com/forms/d/e/1FAIpQLSe7-FALpP-xcDl96omjyETmQCMqi_cgY_vHlCRHlywaj9bD5Q/viewform?embedded=true"
+        class="google-form-frame"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+      >
+        Carregando…
+      </iframe>
+    </div>
+
+    <script src="assets/js/global.js"></script>
+
+    <script>
+      // Monitora quando a janela perde o foco (o que acontece quando clicamos no iframe)
+      window.addEventListener("blur", function () {
+        // Damos um tempo minúsculo para o navegador processar onde o foco parou
+        setTimeout(function () {
+          if (document.activeElement.tagName === "IFRAME") {
+            const drop = document.getElementById("userDropdown");
+            if (drop) {
+              drop.classList.add("hidden");
+            }
+          }
+        }, 100);
+      });
+
+      // Garante que a página principal recupere o foco ao passar o mouse na Navbar
+      // Isso ajuda o próximo clique no Iframe a ser detectado novamente
+      document
+        .querySelector(".navbar")
+        .addEventListener("mouseenter", function () {
+          window.focus();
+        });
+    </script>
+  </body>
+</html>

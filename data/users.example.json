@@ -1,0 +1,9 @@
+[
+  {
+    "id": "25214290001",
+    "matricula": "25214290001",
+    "email": "aluno.exemplo@iesb.edu.br",
+    "twoFactorSecret": "EXAMPLESECRETKEYFOR2FADEMO123456",
+    "twoFactorEnabled": false
+  }
+]

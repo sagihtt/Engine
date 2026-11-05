@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Engine</title>
+  <link rel="icon" type="image/png" href="assets/img/favicon.ico" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/login.css" />
+</head>
+
+<body>
+  <div class="login-wrapper">
+    <div class="login-panel">
+      <img src="assets/img/logo.png" alt="Logo Engine Labs" class="logo" />
+
+      <form id="loginForm" autocomplete="off" spellcheck="false">
+        <div class="input-group">
+          <i class="fa-solid fa-user icon"></i>
+          <input 
+            type="text" 
+            id="matricula" 
+            name="matricula" 
+            placeholder="Matrícula" 
+            required 
+            autocomplete="off" 
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-lock icon"></i>
+          <input 
+            type="password" 
+            id="senha" 
+            name="senha" 
+            placeholder="Senha" 
+            required 
+            autocomplete="new-password" 
+            spellcheck="false"
+          />
+        </div>
+
+        <button type="submit" class="btn-login">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+              width="22" height="22" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+              style="margin-right: 8px;">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          <span>Login</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="assets/js/login.js"></script>
+</body>
+</html>
