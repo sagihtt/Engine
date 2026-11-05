@@ -4,24 +4,38 @@ Sistema web de controle de frequência, monitoramento de jornada e administraç�
 
 A aplicação opera continuamente em ambiente de produção no domínio [engine.lat](https://engine.lat), provendo à equipe autogestão de carga horária, relatórios consolidados para validação de atividades complementares e ferramentas embutidas de gerenciamento de servidores.
 
-```
-+-----------------------------------------------------------------------+
-| ARQUITETURA GERAL (engine.lat)                                        |
-|                                                                       |
-| [ Cliente Web ] ---> [ Nginx (Reverse Proxy / HTTPS) ]                |
-|                             |                                         |
-|                    [ Node.js / Express Server ]                       |
-|                             |                                         |
-|         +-------------------+-------------------+                     |
-|         |                   |                   |                     |
-|  [ Sessões Seguras ]  [ 2FA (TOTP) ]   [ Web Terminal SSH2 ]          |
-|  (Bcrypt + Cookies)   (otpauth engine) (Socket.IO + PTY)              |
-|         |                   |                   |                     |
-|         +-------------------+-------------------+                     |
-|                             |                                         |
-|                 [ Armazenamento Estruturado ]                         |
-|                 (Registros de Ponto e Perfis)                         |
-+-----------------------------------------------------------------------+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       ARQUITETURA DO SISTEMA • ENGINE.LAT                   │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                              [ HTTPS / Porta 443 ]
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         NGINX (REVERSE PROXY & SSL)                         │
+│                  Terminação TLS • Compressão Gzip • Cabeçalhos              │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                               [ Proxy Pass / :3000 ]
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      NÚCLEO NODE.JS / EXPRESS (PM2)                         │
+│            Roteamento • Sessões Criptografadas • Middlewares Seguros        │
+├──────────────────────────┬──────────────────────────┬───────────────────────┤
+│    SESSÕES & ACESSO      │    SEGURANÇA & 2FA       │    TERMINAL WEB SSH   │
+│  • Cookies HTTP-Only     │  • Algoritmo RFC 6238    │  • Cliente SSH2       │
+│  • Hash Bcrypt (Salt 10) │  • Token TOTP (otpauth)  │  • WebSocket (SocketIO│
+│  • Middleware de Proteção│  • Chaves Base32         │  • Emulação PTY       │
+└────────────┬─────────────┴────────────┬─────────────┴───────────┬───────────┘
+             │                          │                         │
+             └──────────────────────────┼─────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      CAMADA DE PERSISTÊNCIA ESTRUTURADA                     │
+│               /data/registros.txt  •  /data/perfis.json  •  /data/users.json│
+│               • Histórico de Ponto • Perfis e Métricas  • Chaves e Contas   │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Contexto e Justificativa do Projeto
@@ -41,19 +55,19 @@ Diante da necessidade de coordenar as atividades dos integrantes, computar com e
 ## Registros Visuais da Aplicação
 
 ### Tela de Autenticação e Acesso Seguro
-![Autenticação de Operadores](docs/screenshots/01-login-engine.png)
+![Autenticação de Operadores](docs/screenshots/01-login-engine.png?v=2)
 
 ### Painel Principal e Métricas de Produtividade
-![Dashboard de Controle de Jornada](docs/screenshots/02-dashboard-engine.png)
+![Dashboard de Controle de Jornada](docs/screenshots/02-dashboard-engine.png?v=2)
 
 ### Interface de Registro de Frequência
-![Registro de Ponto](docs/screenshots/03-registro-ponto.png)
+![Registro de Ponto](docs/screenshots/03-registro-ponto.png?v=2)
 
 ### Central de Emissão de Relatórios e Auditoria
-![Relatórios da Equipe e Extratos](docs/screenshots/04-relatorios.png)
+![Relatórios da Equipe e Extratos](docs/screenshots/04-relatorios.png?v=2)
 
 ### Console Administrativo SSH via Navegador
-![Terminal Web SSH com 2FA](docs/screenshots/05-terminal-ssh.png)
+![Terminal Web SSH com 2FA](docs/screenshots/05-terminal-ssh.png?v=2)
 
 ## Estrutura do Repositório
 
